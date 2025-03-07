@@ -24,3 +24,22 @@ interface Correlatives {
   code: string
   correlatives: string[]
 }
+
+// getCareerById
+
+export interface IPopulatedSubject {
+  _id: Types.ObjectId
+  name: string
+  code: string
+  offering?: string
+  correlatives: { code: string }[]
+}
+
+export interface IPopulatedCareerYear {
+  year: string
+  subjects: IPopulatedSubject[]
+}
+
+export interface IPopulatedCareer extends Omit<ICareer, 'subjectsByYear'> {
+  subjectsByYear: IPopulatedCareerYear[]
+}
