@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --env-file=src/.env ./src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --env-file=.env ./src/index.ts",
     "tsc": "tsc",
-    "start": "node --env-file=build/.env build/index.js"
+    "start": "node --env-file=.env ./dist/index.js"
   },
   "keywords": [],
   "author": "",
