@@ -1,10 +1,7 @@
 import mongoose from 'mongoose'
 
 export const openDatabaseConnection = async () => {
-  // No queremos que este tipeada en código. Tenemos que usar variables de entorno.
   const { PDE_MONGODB_HOST, PDE_MONGODB_DATABASE } = process.env
-  // const PDE_MONGODB_HOST = 'localhost'
-  // const PDE_MONGODB_DATABASE = 'plan-de-estudios'
 
   if (!PDE_MONGODB_HOST || !PDE_MONGODB_DATABASE)
     throw new Error('Missing MongoDB configuration in environment variables')
