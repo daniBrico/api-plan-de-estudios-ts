@@ -1,4 +1,4 @@
-import fsPromises from 'fs/promises'
+import careersData from '../data/careers.json'
 import {
   closeDatabaseConnection,
   openDatabaseConnection,
@@ -6,22 +6,15 @@ import {
 import SubjectModel from '../../models/mongoDB/schemas/subject.model.js'
 import CareerModel from '../../models/mongoDB/schemas/career.model.js'
 
-const main = async () => {
-  try {
-    await openDatabaseConnection()
-    await setCareers()
-  } catch (err) {
-    console.log('Error al conectarse a MongoDB: ', err)
-  } finally {
-    closeDatabaseConnection()
-  }
-}
+openDatabaseConnection()
+  .then(() => {
+    setCareers()
+  })
+  .catch((err) => {
+    console.error('Error conectando a MongoDB: ', err)
+  })
 
 const setCareers = async () => {
-  const careersData = JSON.parse(
-    await fsPromises.readFile('../data/careers.json', 'utf-8')
-  )
-
   try {
     // Obtengo todas las materias de la base de datos
     const subjects = await SubjectModel.find()
@@ -55,9 +48,9 @@ const setCareers = async () => {
 
       await newCareer.save()
     }
+
+    await closeDatabaseConnection()
   } catch (err) {
     console.log('Error adding careers: ', err)
   }
 }
-
-main()

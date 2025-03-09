@@ -1,32 +1,20 @@
-import fsPromises from 'fs/promises'
+import subjectsCorrelativesData from '../data/subjectsCorrelative.json'
 import {
   closeDatabaseConnection,
   openDatabaseConnection,
 } from '../../models/mongoDB/database.js'
-import { Correlatives } from '../../types/types.js'
 import SubjectModel from '../../models/mongoDB/schemas/subject.model.js'
 
-const main = async () => {
-  try {
-    await openDatabaseConnection()
-    await setSubjectsCorrelatives()
-  } catch (err) {
+openDatabaseConnection()
+  .then(() => {
+    setSubjectsCorrelatives()
+  })
+  .catch((err) => {
     console.log('Error al conectarse a MongoDB: ', err)
-  } finally {
-    try {
-      await closeDatabaseConnection()
-    } catch (err) {
-      console.log('Error al cerrar la conexión: ', err)
-    }
-  }
-}
+  })
 
 const setSubjectsCorrelatives = async () => {
   try {
-    const subjectsCorrelativesData: Correlatives[] = JSON.parse(
-      await fsPromises.readFile('../data/subjectsCorrelative.json', 'utf-8')
-    )
-
     // Obtengo todas las materias cargadas en la base de datos
     const subjects = await SubjectModel.find().exec()
 
@@ -52,9 +40,9 @@ const setSubjectsCorrelatives = async () => {
         )
       })
     )
+
+    await closeDatabaseConnection()
   } catch (err) {
     console.log('Error en setSubjectsCorrelatives: ', err)
   }
 }
-
-main()

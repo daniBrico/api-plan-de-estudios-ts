@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "ts-node-dev --env-file=.env ./src/index.ts",
     "tsc": "tsc",
-    "start": "node --env-file=.env ./dist/index.js"
+    "start": "node --env-file=.env ./dist/index.js",
+    "setSubjects": "node --env-file=.env ./dist/scripts/seeds/setSubjects.js",
+    "setSubjectsCorrelatives": "node --env-file=.env ./dist/scripts/seeds/setSubjectsCorrelatives.js",
+    "setCareers": "node --env-file=.env ./dist/scripts/seeds/setCareers.js"
   },
   "keywords": [],
   "author": "",
