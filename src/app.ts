@@ -4,8 +4,10 @@ import cors from 'cors'
 
 const app = express()
 
+const FRONTEND_URL = process.env.FRONTEND_URL
+
 const corsOptions = {
-  origin: ['http://localhost:5173', 'http://localhost:58492'],
+  origin: FRONTEND_URL,
   methods: 'GET',
   credentials: true,
 }
