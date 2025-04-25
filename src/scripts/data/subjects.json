@@ -1,271 +1,383 @@
 [
   {
-    "name": "Tecnología Aplicada",
+    "name": { "longName": "Tecnología Aplicada", "shortName": "Tec. Aplicada" },
     "code": "07071",
     "offering": "1°C"
   },
   {
-    "name": "Algebra y Geometría Analítica",
+    "name": {
+      "longName": "Algebra y Geometría Analítica",
+      "shortName": "Algebra y Geom. Analítica"
+    },
     "code": "01017",
     "offering": "1°C"
   },
   {
-    "name": "Algoritmo y Estructuras de Datos",
+    "name": {
+      "longName": "Algoritmo y Estructuras de Datos",
+      "shortName": "Algoritmo y Estruct. Datos"
+    },
     "code": "07030",
     "offering": "1°C"
   },
   {
-    "name": "Teoría de Sistemas y Organizaciones",
+    "name": {
+      "longName": "Teoría de Sistemas y Organizaciones",
+      "shortName": "Teoría de Sist. y Org."
+    },
     "code": "07032",
     "offering": "2°C"
   },
   {
-    "name": "Problemática Regional",
+    "name": {
+      "longName": "Problemática Regional"
+    },
     "code": "02004",
     "offering": "2°C"
   },
   {
-    "name": "Arquitectura de Computadores I",
+    "name": {
+      "longName": "Arquitectura de Computadores I",
+      "shortName": "Arq. de Computadores I"
+    },
     "code": "07031",
     "offering": "2°C"
   },
   {
-    "name": "Programación con Objetos I",
+    "name": {
+      "longName": "Programación con Objetos I",
+      "shortName": "Prog. con Objetos I"
+    },
     "code": "07033",
     "offering": "2°C"
   },
   {
-    "name": "Análisis y Producción del Discurso",
+    "name": {
+      "longName": "Análisis y Producción del Discurso",
+      "shortName": "Análisis y Prod. Discurso"
+    },
     "code": "02001",
     "offering": "1°C"
   },
   {
-    "name": "Matemáticas Discretas",
+    "name": {
+      "longName": "Matemáticas Discretas"
+    },
     "code": "01018",
     "offering": "1°C"
   },
-
   {
-    "name": "Análisis Matemático I",
+    "name": {
+      "longName": "Análisis Matemático I"
+    },
     "code": "01019",
     "offering": "1°C"
   },
   {
-    "name": "Programación con Objetos II",
+    "name": {
+      "longName": "Programación con Objetos II",
+      "shortName": "Prog. con Objetos II"
+    },
     "code": "07034",
     "offering": "1°C"
   },
   {
-    "name": "Electiva",
+    "name": { "longName": "Electiva" },
     "code": "00004",
     "offering": "1°C"
   },
   {
-    "name": "Arquitectura de Computadores II",
+    "name": {
+      "longName": "Arquitectura de Computadores II",
+      "shortName": "Arq. de Computadores II"
+    },
     "code": "07036",
     "offering": "1°C"
   },
   {
-    "name": "Lenguajes Formales",
+    "name": { "longName": "Lenguajes Formales" },
     "code": "07035",
     "offering": "1°C"
   },
   {
-    "name": "Universidad, Ciencia y Sociedad",
+    "name": {
+      "longName": "Universidad, Ciencia y Sociedad",
+      "shortName": "Univ., Ciencia y Soc."
+    },
     "code": "02036",
     "offering": "2°C"
   },
   {
-    "name": "Ingeniería de Software I",
+    "name": {
+      "longName": "Ingeniería de Software I",
+      "shortName": "Ing. de Software I"
+    },
     "code": "07041",
     "offering": "2°C"
   },
   {
-    "name": "Probabilidad y Estadística",
+    "name": {
+      "longName": "Probabilidad y Estadística",
+      "shortName": "Prob. y Estadística"
+    },
     "code": "01020",
     "offering": "2°C"
   },
   {
-    "name": "Sistemas Operativos I",
+    "name": {
+      "longName": "Sistemas Operativos I",
+      "shortName": "Sist. Operativos I"
+    },
     "code": "07039",
     "offering": "2°C"
   },
   {
-    "name": "Base de Datos I",
+    "name": { "longName": "Base de Datos I", "shortName": "BD I" },
     "code": "07014",
     "offering": "2°C"
   },
   {
-    "name": "Comunicación y Redes I",
+    "name": {
+      "longName": "Comunicación y Redes I",
+      "shortName": "Com. y Redes I"
+    },
     "code": "07040",
     "offering": "2°C"
   },
   {
-    "name": "Análisis Matemático II",
+    "name": {
+      "longName": "Análisis Matemático II"
+    },
     "code": "01021",
     "offering": "1°C"
   },
   {
-    "name": "Base de Datos II",
+    "name": { "longName": "Base de Datos II", "shortName": "BD II" },
     "code": "07017",
     "offering": "1°C"
   },
   {
-    "name": "Comunicación y Redes II",
+    "name": {
+      "longName": "Comunicación y Redes II",
+      "shortName": "Com. y Redes II"
+    },
     "code": "07045",
     "offering": "1°C"
   },
   {
-    "name": "Ingeniería de Software II",
+    "name": {
+      "longName": "Ingeniería de Software II",
+      "shortName": "Ing. de Software II"
+    },
     "code": "07043",
     "offering": "1°C"
   },
   {
-    "name": "Interfaces de Usuarios y Tecnologías Web",
+    "name": {
+      "longName": "Interfaces de Usuarios y Tecnologías Web",
+      "shortName": "Interfaces y Tec. Web"
+    },
     "code": "07044",
     "offering": "1°C"
   },
   {
-    "name": "Programación con Objetos III",
+    "name": {
+      "longName": "Programación con Objetos III",
+      "shortName": "Prog. con Objetos III"
+    },
     "code": "07048",
     "offering": "2°C"
   },
   {
-    "name": "Matemática Aplicada",
+    "name": {
+      "longName": "Matemática Aplicada"
+    },
     "code": "01022",
     "offering": "2°C"
   },
   {
-    "name": "Explotación de Datos",
+    "name": {
+      "longName": "Explotación de Datos"
+    },
     "code": "07046",
     "offering": "2°C"
   },
   {
-    "name": "Taller de Redes",
+    "name": { "longName": "Taller de Redes" },
     "code": "07047",
     "offering": "2°C"
   },
   {
-    "name": "Sistemas Operativos II",
+    "name": {
+      "longName": "Sistemas Operativos II",
+      "shortName": "Sist. Operativos II"
+    },
     "code": "07050",
     "offering": "2°C"
   },
   {
-    "name": "Dirección y Evaluación de Proyectos Informáticos",
+    "name": {
+      "longName": "Dirección y Evaluación de Proyectos Informáticos",
+      "shortName": "Dir. y Eval. Proy. Inf."
+    },
     "code": "07023",
     "offering": "1°C"
   },
   {
-    "name": "Arquitectura de Software",
+    "name": {
+      "longName": "Arquitectura de Software",
+      "shortName": "Arq. de Software"
+    },
     "code": "07051",
     "offering": "1°C"
   },
   {
-    "name": "Modelos, Simulación y Teoría de la Decisión",
+    "name": {
+      "longName": "Modelos, Simulación y Teoría de la Decisión",
+      "shortName": "Modelos y Simulación"
+    },
     "code": "01023",
     "offering": "1°C"
   },
   {
-    "name": "Metodología de la Investigación",
+    "name": {
+      "longName": "Metodología de la Investigación",
+      "shortName": "Metodología de Inv."
+    },
     "code": "02037",
     "offering": "1°C"
   },
   {
-    "name": "Paradigmas de Programación",
+    "name": {
+      "longName": "Paradigmas de Programación",
+      "shortName": "Paradigmas de Prog."
+    },
     "code": "07052",
     "offering": "1°C"
   },
   {
-    "name": "Lenguajes de Programación",
+    "name": {
+      "longName": "Lenguajes de Programación",
+      "shortName": "Lenguajes de Prog."
+    },
     "code": "07054",
     "offering": "1°C"
   },
   {
-    "name": "Infraestructura de Sistemas",
+    "name": {
+      "longName": "Infraestructura de Sistemas",
+      "shortName": "Infraestructura de Sist."
+    },
     "code": "07057",
     "offering": "2°C"
   },
   {
-    "name": "Desarrollo de Compiladores",
+    "name": {
+      "longName": "Desarrollo de Compiladores",
+      "shortName": "Desarrollo de Comp."
+    },
     "code": "07058",
     "offering": "2°C"
   },
   {
-    "name": "Inteligencia Artificial",
+    "name": {
+      "longName": "Inteligencia Artificial"
+    },
     "code": "07059",
     "offering": "2°C"
   },
   {
-    "name": "Práctica Profesional",
+    "name": {
+      "longName": "Práctica Profesional"
+    },
     "code": "07060",
     "offering": "2°C"
   },
-
   {
-    "name": "Optativa I",
+    "name": { "longName": "Optativa I" },
     "code": "00009",
     "offering": "1°C"
   },
   {
-    "name": "Aspectos Legales y Sociales de la Informática",
+    "name": {
+      "longName": "Aspectos Legales y Sociales de la Informática",
+      "shortName": "Aspectos Legales y Soc."
+    },
     "code": "02038",
     "offering": "1°C"
   },
   {
-    "name": "Ingeniería de Software III",
+    "name": {
+      "longName": "Ingeniería de Software III",
+      "shortName": "Ing. de Software III"
+    },
     "code": "07062",
     "offering": "1°C"
   },
   {
-    "name": "Sistemas de Tiempo Real y Misión Crítica",
+    "name": {
+      "longName": "Sistemas de Tiempo Real y Misión Crítica",
+      "shortName": "Sist. de Tiempo Real"
+    },
     "code": "07064",
     "offering": "1°C"
   },
   {
-    "name": "Economía I",
+    "name": { "longName": "Economía I" },
     "code": "09021",
     "offering": "1°C"
   },
   {
-    "name": "Optativa II",
+    "name": { "longName": "Optativa II", "shortName": "OP II" },
     "code": "00010",
     "offering": "2°C"
   },
   {
-    "name": "Seguridad y Auditoría",
+    "name": {
+      "longName": "Seguridad y Auditoría"
+    },
     "code": "07065",
     "offering": "2°C"
   },
   {
-    "name": "Teoría de la Computación",
+    "name": {
+      "longName": "Teoría de la Computación",
+      "shortName": "Teoría de la Comp."
+    },
     "code": "07067",
     "offering": "2°C"
   },
   {
-    "name": "Administración y Gestión de las Organizaciones",
+    "name": {
+      "longName": "Administración y Gestión de las Organizaciones",
+      "shortName": "Adm. y Gestión de Org."
+    },
     "code": "08022",
     "offering": "2°C"
   },
   {
-    "name": "Economía II",
+    "name": { "longName": "Economía II" },
     "code": "09022",
     "offering": "2°C"
   },
   {
-    "name": "Trabajo Final",
+    "name": { "longName": "Trabajo Final" },
     "code": "07068",
     "offering": "Anual"
   },
   {
-    "name": "Inglés I",
+    "name": { "longName": "Inglés I" },
     "code": "SA 002"
   },
   {
-    "name": "Inglés II",
+    "name": { "longName": "Inglés II" },
     "code": "SA 003"
   },
   {
-    "name": "Trabajo Social Obligatorio",
+    "name": {
+      "longName": "Trabajo Social Obligatorio",
+      "shortName": "Trabajo Social Obl."
+    },
     "code": "SA 001"
   }
 ]

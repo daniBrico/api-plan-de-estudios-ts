@@ -3,8 +3,13 @@ import { ISubject } from '../../../types/types'
 
 const SubjectSchema = new Schema<ISubject>({
   name: {
-    type: String,
-    required: true,
+    longName: {
+      type: String,
+      required: true,
+    },
+    shortName: {
+      type: String,
+    },
   },
   code: {
     type: String,

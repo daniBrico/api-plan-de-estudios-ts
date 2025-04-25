@@ -14,7 +14,10 @@ export interface ICareer extends Document {
 }
 
 interface ISubject extends Document {
-  name: string
+  name: {
+    longName: string
+    shortName?: string
+  }
   code: string
   offering?: string
   correlatives?: Schema.Types.ObjectId[]
@@ -29,7 +32,10 @@ interface Correlatives {
 
 export interface IPopulatedSubject {
   _id: Types.ObjectId
-  name: string
+  name: {
+    longName: string
+    shortName: string
+  }
   code: string
   offering?: string
   correlatives: { code: string }[]

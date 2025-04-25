@@ -7,7 +7,7 @@ const app = express()
 const FRONTEND_URL = process.env.FRONTEND_URL
 
 const corsOptions = {
-  origin: FRONTEND_URL,
+  origin: [`${FRONTEND_URL}`, 'http://192.168.0.6:5173'],
   methods: 'GET',
   credentials: true,
 }
