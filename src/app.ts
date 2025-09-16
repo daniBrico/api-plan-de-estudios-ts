@@ -4,10 +4,14 @@ import cors from 'cors'
 
 const app = express()
 
-const FRONTEND_URL = process.env.FRONTEND_URL
+const { FRONTEND_URL, FRONTEND_URL_GITHUB_PAGES } = process.env
 
 const corsOptions = {
-  origin: [`${FRONTEND_URL}`, 'http://192.168.0.6:5173'],
+  origin: [
+    `${FRONTEND_URL}`,
+    `${FRONTEND_URL_GITHUB_PAGES}`,
+    'http://192.168.0.4:5173',
+  ],
   methods: 'GET',
   credentials: true,
 }
