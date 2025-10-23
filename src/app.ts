@@ -4,14 +4,19 @@ import cors from 'cors'
 
 const app = express()
 
-const { FRONTEND_URL_LOCALHOST, FRONTEND_URL_GITHUB_PAGES, FRONTEND_URL_IP } =
-  process.env
+const {
+  FRONTEND_URL_LOCAL,
+  FRONTEND_URL_LAN,
+  FRONTEND_URL_GITHUB_PAGES,
+  FRONTEND_URL_RENDER,
+} = process.env
 
 const corsOptions = {
   origin: [
-    `${FRONTEND_URL_LOCALHOST}`,
+    `${FRONTEND_URL_LOCAL}`,
+    `${FRONTEND_URL_LAN}`,
     `${FRONTEND_URL_GITHUB_PAGES}`,
-    `${FRONTEND_URL_IP}`,
+    `${FRONTEND_URL_RENDER}`,
   ],
   methods: 'GET',
   credentials: true,

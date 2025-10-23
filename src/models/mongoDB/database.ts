@@ -1,15 +1,15 @@
 import mongoose from 'mongoose'
 
 export const openDatabaseConnection = async () => {
-  const { MONGODB_HOST, DATABASE_NAME } = process.env
+  const { MONGODB_URI, DATABASE_NAME } = process.env
 
-  if (!MONGODB_HOST || !DATABASE_NAME)
+  if (!MONGODB_URI || !DATABASE_NAME)
     throw new Error('Missing MongoDB configuration in environment variables')
 
-  const MONGODB_URI = `${MONGODB_HOST}${DATABASE_NAME}`
+  const MONGODB_URI_NAME = `${MONGODB_URI}${DATABASE_NAME}`
 
   try {
-    await mongoose.connect(MONGODB_URI)
+    await mongoose.connect(MONGODB_URI_NAME)
     console.log('DB is connected')
   } catch (err) {
     console.log('Error connecting to the database: ', err)
