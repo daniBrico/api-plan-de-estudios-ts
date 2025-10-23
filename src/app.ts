@@ -4,10 +4,15 @@ import cors from 'cors'
 
 const app = express()
 
-const { FRONTEND_URL, FRONTEND_URL_GITHUB_PAGES } = process.env
+const { FRONTEND_URL_LOCALHOST, FRONTEND_URL_GITHUB_PAGES, FRONTEND_URL_IP } =
+  process.env
 
 const corsOptions = {
-  origin: [`${FRONTEND_URL}`, `${FRONTEND_URL_GITHUB_PAGES}`],
+  origin: [
+    `${FRONTEND_URL_LOCALHOST}`,
+    `${FRONTEND_URL_GITHUB_PAGES}`,
+    `${FRONTEND_URL_IP}`,
+  ],
   methods: 'GET',
   credentials: true,
 }
@@ -17,8 +22,5 @@ app.use(cors(corsOptions))
 app.use(express.json())
 
 app.use('/career', careerRoutes)
-app.use('/ping', (_req, res) => {
-  res.send('pong')
-})
 
 export { app }

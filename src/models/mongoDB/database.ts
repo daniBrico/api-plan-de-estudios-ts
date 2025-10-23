@@ -1,12 +1,12 @@
 import mongoose from 'mongoose'
 
 export const openDatabaseConnection = async () => {
-  const { PDE_MONGODB_HOST, PDE_MONGODB_DATABASE } = process.env
+  const { MONGODB_HOST, DATABASE_NAME } = process.env
 
-  if (!PDE_MONGODB_HOST || !PDE_MONGODB_DATABASE)
+  if (!MONGODB_HOST || !DATABASE_NAME)
     throw new Error('Missing MongoDB configuration in environment variables')
 
-  const MONGODB_URI = `${PDE_MONGODB_HOST}${PDE_MONGODB_DATABASE}`
+  const MONGODB_URI = `${MONGODB_HOST}${DATABASE_NAME}`
 
   try {
     await mongoose.connect(MONGODB_URI)
