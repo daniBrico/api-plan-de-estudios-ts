@@ -1,5 +1,6 @@
 import express from 'express'
 import careerRoutes from './routes/career.routes'
+import authRoutes from './routes/auth.routes'
 import cors from 'cors'
 
 const app = express()
@@ -26,6 +27,10 @@ app.use(cors(corsOptions))
 
 app.use(express.json())
 
+/* Auth routes */
+app.use('/auth', authRoutes)
+
+/* Career routes */
 app.use('/career', careerRoutes)
 
 export { app }
