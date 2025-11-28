@@ -23,6 +23,15 @@ interface ISubject extends Document {
   correlatives?: Schema.Types.ObjectId[]
 }
 
+export interface IUser extends Document {
+  name: string
+  lastName: string
+  email: string
+  password: string
+  encryptPassword(password: string): Promise<string>
+  matchPassword(password: string): Promise<boolean>
+}
+
 interface Correlatives {
   code: string
   correlatives: string[]
