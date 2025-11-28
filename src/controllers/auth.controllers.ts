@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import UserModel from '../models/mongoDB/schemas/user.model'
+import { createAccessToken } from '../utils/jwt'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   const { name, lastName, email, password } = req.body
@@ -21,6 +22,15 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     newUser.password = await newUser.encryptPassword(password)
 
     const savedUser = await newUser.save()
+
+    const token = createAccessToken({
+      _id: savedUser._id,
+      name: savedUser.name,
+      lastName: savedUser.lastName,
+      email: savedUser.email,
+    })
+
+    res.cookie('token', token)
 
     res.status(201).json({
       message: 'User created successfully',

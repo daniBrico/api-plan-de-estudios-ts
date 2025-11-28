@@ -58,3 +58,11 @@ export interface IPopulatedCareerYear {
 export interface IPopulatedCareer extends Omit<ICareer, 'subjectsByYear'> {
   subjectsByYear: IPopulatedCareerYear[]
 }
+
+/* jwt */
+export interface TokenPayload {
+  _id: Types.ObjectId
+  name: string
+  lastName: string
+  email: string
+}
