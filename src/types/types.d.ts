@@ -66,3 +66,13 @@ export interface TokenPayload {
   lastName: string
   email: string
 }
+
+/* Express */
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: TokenPayload
+    }
+  }
+}
