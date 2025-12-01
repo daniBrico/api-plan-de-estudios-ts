@@ -6,14 +6,13 @@ export const authMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies.token
-
-  if (!token) {
-    res.status(401).json({ message: 'Invalid token' })
-    return
-  }
-
   try {
+    const token = req.cookies.token
+
+    if (!token) {
+      res.status(401).json({ message: 'Invalid token' })
+      return
+    }
     const decoded = verifyAccessToken(token)
 
     req.user = {

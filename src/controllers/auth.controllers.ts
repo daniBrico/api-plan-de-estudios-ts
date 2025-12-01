@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import UserModel from '../models/mongoDB/schemas/user.model'
 import { createAccessToken } from '../utils/jwt'
+import bcrypt from 'bcrypt'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   const { name, lastName, email, password } = req.body
@@ -39,6 +40,52 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   } catch (err) {
     console.error(err)
     res.status(500).json({ message: 'Internal server error' })
+  }
+}
+
+export const loginUser = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body
+    console.log('🚀 ~ loginUser ~ email: ', email)
+
+    if (!email || !password) {
+      res.status(400).json({ message: 'Invalid credentials' })
+      return
+    }
+
+    const userFounded = await UserModel.findOne({ email })
+    if (!userFounded) {
+      res.status(401).json({ message: 'User not found' })
+      return
+    }
+
+    const passMatch = await bcrypt.compare(password, userFounded.password)
+    if (!passMatch) {
+      res.status(401).json({ message: 'Invalid password' })
+      return
+    }
+
+    const user = {
+      _id: userFounded._id,
+      name: userFounded.email,
+      lastName: userFounded.lastName,
+      email: userFounded.email,
+    }
+
+    const token = await createAccessToken(user)
+    res.cookie('token', token)
+
+    res.status(200).json({
+      message: 'Login was successful',
+      user: user,
+    })
+  } catch (err) {
+    res.status(500).json({
+      message:
+        err instanceof Error
+          ? `Error in login user: ${err.message}`
+          : 'Unknown error',
+    })
   }
 }
 
