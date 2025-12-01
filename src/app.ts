@@ -2,6 +2,7 @@ import express from 'express'
 import careerRoutes from './routes/career.routes'
 import authRoutes from './routes/auth.routes'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -26,6 +27,8 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 app.use(express.json())
+
+app.use(cookieParser())
 
 /* Auth routes */
 app.use('/auth', authRoutes)
