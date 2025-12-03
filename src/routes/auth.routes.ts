@@ -9,7 +9,7 @@ import { authMiddleware } from '../middlewares/auth.middleware'
 const router = Router()
 
 router.post('/register', register)
-router.get('/login', loginUser)
+router.post('/login', loginUser)
 
 router.get('/verify', authMiddleware, verifyToken)
 
