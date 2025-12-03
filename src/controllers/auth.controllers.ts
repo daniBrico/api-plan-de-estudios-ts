@@ -46,7 +46,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body
-    console.log('🚀 ~ loginUser ~ email: ', email)
 
     if (!email || !password) {
       res.status(400).json({ message: 'Invalid credentials' })
@@ -67,7 +66,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const user = {
       _id: userFounded._id,
-      name: userFounded.email,
+      name: userFounded.name,
       lastName: userFounded.lastName,
       email: userFounded.email,
     }
