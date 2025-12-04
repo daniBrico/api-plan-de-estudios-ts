@@ -27,7 +27,7 @@ const UserSchema = new Schema<IUser>(
   {
     timestamps: true,
     toObject: {
-      transform: (_, ret) => {
+      transform: (_, ret: any) => {
         delete ret.password
         delete ret.__v
         delete ret.createdAt
@@ -36,7 +36,7 @@ const UserSchema = new Schema<IUser>(
       },
     },
     toJSON: {
-      transform: (_, ret) => {
+      transform: (_, ret: any) => {
         delete ret.password
         delete ret.__v
         delete ret.createdAt

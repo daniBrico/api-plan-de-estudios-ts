@@ -30,6 +30,8 @@ export interface IUser extends Document {
   password: string
   encryptPassword(password: string): Promise<string>
   matchPassword(password: string): Promise<boolean>
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 interface Correlatives {
