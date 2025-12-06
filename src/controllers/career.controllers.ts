@@ -1,7 +1,7 @@
 import CareerModel from '../models/mongoDB/schemas/career.model'
 import SubjectModel from '../models/mongoDB/schemas/subject.model'
 import { Request, Response } from 'express'
-import { IPopulatedCareer } from '../types/types'
+import { PopulatedCareer } from '../types/types'
 
 export const getCareerNames = async (
   _req: Request,
@@ -48,7 +48,7 @@ export const getCareerByID = async (
       return
     }
 
-    const populatedCareer = career as unknown as IPopulatedCareer
+    const populatedCareer = career as unknown as PopulatedCareer
 
     const transformedCareer = {
       ...populatedCareer,

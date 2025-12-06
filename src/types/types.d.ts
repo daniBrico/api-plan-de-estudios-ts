@@ -1,19 +1,19 @@
 import { Document, Schema } from 'mongoose'
 
-export interface ISubjectsByYear {
+export interface SubjectsByYear {
   year: string
   subjects: Schema.Types.ObjectId[]
 }
 
-export interface ICareer extends Document {
+export interface Career extends Document {
   name: string
   duration: number
   intermediateDegree?: string
   intermediateDegreeDuration?: number
-  subjectsByYear: ISubjectsByYear[]
+  subjectsByYear: SubjectsByYear[]
 }
 
-interface ISubject extends Document {
+interface Subject extends Document {
   name: {
     longName: string
     shortName?: string
@@ -23,11 +23,14 @@ interface ISubject extends Document {
   correlatives?: Schema.Types.ObjectId[]
 }
 
-export interface IUser extends Document {
+export interface User extends Document {
   name: string
   lastName: string
   email: string
   password: string
+  isVerified: false
+  verificationToken?: string
+  verificationTokenExpires?: Date
   encryptPassword(password: string): Promise<string>
   matchPassword(password: string): Promise<boolean>
   createdAt?: Date
@@ -41,7 +44,7 @@ interface Correlatives {
 
 // getCareerById
 
-export interface IPopulatedSubject {
+export interface PopulatedSubject {
   _id: Types.ObjectId
   name: {
     longName: string
@@ -52,13 +55,13 @@ export interface IPopulatedSubject {
   correlatives: { code: string }[]
 }
 
-export interface IPopulatedCareerYear {
+export interface PopulatedCareerYear {
   year: string
-  subjects: IPopulatedSubject[]
+  subjects: PopulatedSubject[]
 }
 
-export interface IPopulatedCareer extends Omit<ICareer, 'subjectsByYear'> {
-  subjectsByYear: IPopulatedCareerYear[]
+export interface PopulatedCareer extends Omit<Career, 'subjectsByYear'> {
+  subjectsByYear: PopulatedCareerYear[]
 }
 
 /* jwt */
