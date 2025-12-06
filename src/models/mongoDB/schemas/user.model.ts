@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose'
 import bcrypt from 'bcrypt'
-import { IUser } from '../../../types/types'
+import { User } from '../../../types/types'
 
-const UserSchema = new Schema<IUser>(
+const UserSchema = new Schema<User>(
   {
     name: {
       type: String,
@@ -23,6 +23,18 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: null,
+    },
+    verificationTokenExpires: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -32,6 +44,8 @@ const UserSchema = new Schema<IUser>(
         delete ret.__v
         delete ret.createdAt
         delete ret.updatedAt
+        delete ret.verificationToken
+        delete ret.verificationTokenExpires
         return ret
       },
     },
@@ -41,6 +55,8 @@ const UserSchema = new Schema<IUser>(
         delete ret.__v
         delete ret.createdAt
         delete ret.updatedAt
+        delete ret.verificationToken
+        delete ret.verificationTokenExpires
         return ret
       },
     },
