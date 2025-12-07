@@ -2,11 +2,14 @@ import { Request, Response } from 'express'
 import UserModel from '../models/mongoDB/schemas/user.model'
 import { createAccessToken } from '../utils/jwt'
 import bcrypt from 'bcrypt'
+import { randomUUID } from 'node:crypto'
+import { Temporal } from '@js-temporal/polyfill'
+import sendVerificationEmail from '../utils/sendVerificationEmail'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
-  const { name, lastName, email, password } = req.body
-
   try {
+    const { name, lastName, email, password } = req.body
+
     const userFound = await UserModel.findOne({ email })
 
     if (userFound !== null) {
@@ -22,19 +25,35 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     newUser.password = await newUser.encryptPassword(password)
 
+    const verificationToken = randomUUID()
+
+    const verificationTokenExpires = new Date(
+      Temporal.Now.instant().add({ hours: 24 }).epochMilliseconds
+    )
+
+    newUser.verificationToken = verificationToken
+    newUser.verificationTokenExpires = verificationTokenExpires
+
     const savedUser = await newUser.save()
 
-    const token = createAccessToken({
-      _id: savedUser._id,
-      name: savedUser.name,
-      lastName: savedUser.lastName,
-      email: savedUser.email,
+    const verificationEmailResult = await sendVerificationEmail({
+      email,
+      token: verificationToken,
+      name,
     })
 
-    res.cookie('token', token)
+    if (!verificationEmailResult.ok) {
+      res.status(201).json({
+        message:
+          'User created, but verification email could not be sent. Please request a new verification email.',
+        emailSent: false,
+        user: savedUser,
+      })
+    }
 
     res.status(201).json({
-      message: 'User created successfully',
+      message: 'User created successfully. Please verify your email.',
+      emailSent: true,
       user: savedUser,
     })
   } catch (err) {
