@@ -43,6 +43,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     })
 
     if (!verificationEmailResult.ok) {
+      console.log(
+        'Error from verification email: ',
+        verificationEmailResult.error
+      )
       res.status(201).json({
         message:
           'User created, but verification email could not be sent. Please request a new verification email.',
@@ -136,7 +140,48 @@ export const verifyToken = async (
       return
     }
 
-    // fallback por si err no es una instancia de Error
     res.status(500).json({ message: 'Unexpected error' })
+  }
+}
+
+export const verifyEmail = async (req: Request, res: Response) => {
+  try {
+    const { token } = req.query
+
+    const userFounded = await UserModel.findOne({ verificationToken: token })
+
+    if (!userFounded) {
+      res.status(500).json({ message: 'Invalid token' })
+      return
+    }
+
+    if (!userFounded.verificationTokenExpires) {
+      res.status(500).json({ message: 'Token verification timer not exist.' })
+      return
+    }
+
+    if (userFounded.verificationTokenExpires < new Date()) {
+      res.status(400).json({
+        message: 'Verification link expired.',
+      })
+      return
+    }
+
+    userFounded.isVerified = true
+    userFounded.verificationToken = null
+    userFounded.verificationTokenExpires = null
+
+    await userFounded.save()
+
+    res
+      .status(200)
+      .json({ message: 'Email verified successfully. Please log in' })
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: 'Unexpected error in verify email' })
+      console.log('Unexpected error in verify email: ', error.message)
+    } else {
+      res.status(500).json({ message: 'Unknown error to verify email' })
+    }
   }
 }
