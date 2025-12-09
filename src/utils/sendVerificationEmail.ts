@@ -16,10 +16,10 @@ const sendVerificationEmail = async ({
   name,
 }: SendVerificationEmailProps) => {
   try {
-    const verifyUrl = `${FRONTEND_URL_LOCAL}/plan-estudios-web-ts/auth/verify-email?token=${token}`
+    const verifyUrl = `${FRONTEND_URL_LOCAL}/auth/verify-email?token=${token}`
 
-    await resend.emails.send({
-      from: 'Soporte <no-reply@plan-estudios-web.com>',
+    const { data, error } = await resend.emails.send({
+      from: 'Soporte <no-reply@resend.dev>',
       to: email,
       subject: 'Verifica tu cuenta',
       html: `
@@ -30,7 +30,9 @@ const sendVerificationEmail = async ({
     `,
     })
 
-    return { ok: true }
+    if (!error) return { ok: false, error: error }
+
+    return { ok: true, error: null }
   } catch (error) {
     if (error instanceof Error) {
       console.log('Error sending verification email: ', error.message)
