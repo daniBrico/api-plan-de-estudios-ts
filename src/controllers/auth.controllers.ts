@@ -2,8 +2,6 @@ import { Request, Response } from 'express'
 import UserModel from '../models/mongoDB/schemas/user.model'
 import { createAccessToken } from '../utils/jwt'
 import bcrypt from 'bcrypt'
-import { randomUUID } from 'node:crypto'
-import { Temporal } from '@js-temporal/polyfill'
 import { VerificationService } from '../services/verification.service'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -175,18 +173,22 @@ export const verifyEmail = async (req: Request, res: Response) => {
     const userFounded = await UserModel.findOne({ verificationToken: token })
 
     if (!userFounded) {
-      res.status(500).json({ message: 'Invalid token' })
+      res.status(500).json({ message: 'Invalid token', success: false })
       return
     }
 
     if (!userFounded.verificationTokenExpires) {
-      res.status(500).json({ message: 'Token verification timer not exist.' })
+      res.status(500).json({
+        message: 'Token verification timer not exist.',
+        success: false,
+      })
       return
     }
 
     if (userFounded.verificationTokenExpires < new Date()) {
       res.status(400).json({
         message: 'Verification link expired.',
+        success: false,
       })
       return
     }
@@ -197,15 +199,20 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
     await userFounded.save()
 
-    res
-      .status(200)
-      .json({ message: 'Email verified successfully. Please log in' })
+    res.status(200).json({
+      message: 'Email verified successfully. Please log in',
+      success: true,
+    })
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: 'Unexpected error in verify email' })
+      res
+        .status(500)
+        .json({ message: 'Unexpected error in verify email', success: false })
       console.log('Unexpected error in verify email: ', error.message)
     } else {
-      res.status(500).json({ message: 'Unknown error to verify email' })
+      res
+        .status(500)
+        .json({ message: 'Unknown error to verify email', success: false })
     }
   }
 }
