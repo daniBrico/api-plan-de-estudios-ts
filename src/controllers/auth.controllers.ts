@@ -5,7 +5,6 @@ import bcrypt from 'bcrypt'
 import { randomUUID } from 'node:crypto'
 import { Temporal } from '@js-temporal/polyfill'
 import { VerificationService } from '../services/verification.service'
-import { sendVerificationEmail } from '../utils/emailVerification'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -26,22 +25,20 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     newUser.password = await newUser.encryptPassword(password)
 
-    const verificationToken = randomUUID()
-
-    const verificationTokenExpires = new Date(
-      Temporal.Now.instant().add({ hours: 24 }).epochMilliseconds
-    )
+    const { verificationToken, verificationTokenExpires } =
+      VerificationService.generateTokenEmail()
 
     newUser.verificationToken = verificationToken
     newUser.verificationTokenExpires = verificationTokenExpires
 
     const savedUser = await newUser.save()
 
-    const verificationEmailResult = await sendVerificationEmail({
-      email,
-      token: verificationToken,
-      name,
-    })
+    const verificationEmailResult =
+      await VerificationService.sendVerificationEmail({
+        email,
+        token: verificationToken,
+        name,
+      })
 
     if (!verificationEmailResult.ok) {
       console.log(

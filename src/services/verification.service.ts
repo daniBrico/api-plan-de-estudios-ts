@@ -55,7 +55,7 @@ export class VerificationService {
     return { verified: true, action: 'resendEmail' }
   }
 
-  private static generateTokenEmail = () => {
+  static generateTokenEmail = () => {
     const verificationToken = randomUUID()
     const verificationTokenExpires = new Date(
       Temporal.Now.instant().add({ hours: 24 }).epochMilliseconds
@@ -64,7 +64,7 @@ export class VerificationService {
     return { verificationToken, verificationTokenExpires }
   }
 
-  private static sendVerificationEmail = async ({
+  static sendVerificationEmail = async ({
     email,
     token,
     name,
