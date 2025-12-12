@@ -4,7 +4,8 @@ import { createAccessToken } from '../utils/jwt'
 import bcrypt from 'bcrypt'
 import { randomUUID } from 'node:crypto'
 import { Temporal } from '@js-temporal/polyfill'
-import sendVerificationEmail from '../utils/sendVerificationEmail'
+import { VerificationService } from '../services/verification.service'
+import { sendVerificationEmail } from '../utils/emailVerification'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -66,7 +67,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-export const loginUser = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body
 
@@ -75,31 +76,57 @@ export const loginUser = async (req: Request, res: Response) => {
       return
     }
 
-    const userFounded = await UserModel.findOne({ email })
-    if (!userFounded) {
-      res.status(401).json({ message: 'User not found' })
+    const user = await UserModel.findOne({ email })
+    if (!user) {
+      res.status(401).json({ message: 'Invalid credentials' })
       return
     }
 
-    const passMatch = await bcrypt.compare(password, userFounded.password)
+    const passMatch = await bcrypt.compare(password, user.password)
     if (!passMatch) {
-      res.status(401).json({ message: 'Invalid password' })
+      res.status(401).json({ message: 'Invalid credentials' })
       return
     }
 
-    const user = {
-      _id: userFounded._id,
-      name: userFounded.name,
-      lastName: userFounded.lastName,
-      email: userFounded.email,
+    if (!user.isVerified) {
+      const verificationResult = await VerificationService.handleUnverifiedUser(
+        user
+      )
+
+      if (!verificationResult.emailSent) {
+        res.status(201).json({
+          message:
+            'User created, but verification email could not be sent. Please request a new verification email.',
+          emailSent: false,
+        })
+
+        return
+      }
+
+      res.status(403).json({
+        message: 'Email is not verified. A verification email has been sent',
+        emailSent: true,
+      })
+
+      return
     }
 
-    const token = await createAccessToken(user)
+    const token = createAccessToken({
+      _id: user._id,
+      name: user.name,
+      lastName: user.lastName,
+      email: user.email,
+    })
     res.cookie('token', token)
 
     res.status(200).json({
       message: 'Login was successful',
-      user: user,
+      user: {
+        _id: user._id,
+        name: user.name,
+        lastName: user.lastName,
+        email: user.email,
+      },
     })
   } catch (err) {
     res.status(500).json({
