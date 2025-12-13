@@ -11,7 +11,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     const userFound = await UserModel.findOne({ email })
 
     if (userFound !== null) {
-      res.status(409).json({ message: 'Email already in use' })
+      res.status(409).json({
+        errorCode: 'EMAIL_ALREADY_EXISTS',
+        message: 'Email already in use',
+      })
       return
     }
 
@@ -47,8 +50,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         message:
           'User created, but verification email could not be sent. Please request a new verification email.',
         emailSent: false,
-        user: savedUser,
       })
+
+      return
     }
 
     res.status(201).json({
