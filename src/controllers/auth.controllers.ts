@@ -71,19 +71,28 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body
 
     if (!email || !password) {
-      res.status(400).json({ message: 'Invalid credentials' })
+      res.status(400).json({
+        errorCode: 'INVALID_CREDENTIALS',
+        message: 'Invalid credentials',
+      })
       return
     }
 
     const user = await UserModel.findOne({ email })
     if (!user) {
-      res.status(401).json({ message: 'Invalid credentials' })
+      res.status(401).json({
+        errorCode: 'INVALID_CREDENTIALS',
+        message: 'Invalid credentials',
+      })
       return
     }
 
     const passMatch = await bcrypt.compare(password, user.password)
     if (!passMatch) {
-      res.status(401).json({ message: 'Invalid credentials' })
+      res.status(401).json({
+        errorCode: 'INVALID_CREDENTIALS',
+        message: 'Invalid credentials',
+      })
       return
     }
 
@@ -93,7 +102,7 @@ export const login = async (req: Request, res: Response) => {
       )
 
       if (!verificationResult.emailSent) {
-        res.status(201).json({
+        res.status(500).json({
           message:
             'User created, but verification email could not be sent. Please request a new verification email.',
           emailSent: false,
@@ -102,7 +111,7 @@ export const login = async (req: Request, res: Response) => {
         return
       }
 
-      res.status(403).json({
+      res.status(409).json({
         message: 'Email is not verified. A verification email has been sent',
         emailSent: true,
       })
