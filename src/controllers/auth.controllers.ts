@@ -181,12 +181,16 @@ export const verifyToken = async (
 
 export const verifyEmail = async (req: Request, res: Response) => {
   try {
-    const { token } = req.query
+    const { token } = req.body
 
     const userFounded = await UserModel.findOne({ verificationToken: token })
 
     if (!userFounded) {
-      res.status(500).json({ message: 'Invalid token', success: false })
+      res.status(500).json({
+        message: 'Invalid token',
+        success: false,
+        errorCode: 'TOKEN_INVALID',
+      })
       return
     }
 
@@ -194,6 +198,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
       res.status(500).json({
         message: 'Token verification timer not exist.',
         success: false,
+        errorCode: 'TOKEN_INVALID',
       })
       return
     }
@@ -202,6 +207,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
       res.status(400).json({
         message: 'Verification link expired.',
         success: false,
+        errorCode: 'TOKEN_EXPIRED',
       })
       return
     }
