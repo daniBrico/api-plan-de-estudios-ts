@@ -35,6 +35,14 @@ const UserSchema = new Schema<User>(
       type: Date,
       default: null,
     },
+    lastVerificationEmailSentAt: {
+      type: Date,
+      default: null,
+    },
+    verificationEmailAttempts: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
@@ -46,6 +54,8 @@ const UserSchema = new Schema<User>(
         delete ret.updatedAt
         delete ret.verificationToken
         delete ret.verificationTokenExpires
+        delete ret.lastVerificationEmailSentAt
+        delete ret.verificationEmailAttempts
         return ret
       },
     },
@@ -57,6 +67,8 @@ const UserSchema = new Schema<User>(
         delete ret.updatedAt
         delete ret.verificationToken
         delete ret.verificationTokenExpires
+        delete ret.lastVerificationEmailSentAt
+        delete ret.verificationEmailAttempts
         return ret
       },
     },

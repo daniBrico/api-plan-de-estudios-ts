@@ -31,6 +31,8 @@ export interface User extends Document {
   isVerified: boolean
   verificationToken?: string | null
   verificationTokenExpires?: Date | null
+  lastVerificationEmailSentAt?: Date | null
+  verificationEmailAttempts?: number
   encryptPassword(password: string): Promise<string>
   matchPassword(password: string): Promise<boolean>
   createdAt?: Date
