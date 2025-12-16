@@ -26,25 +26,13 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     newUser.password = await newUser.encryptPassword(password)
 
-    const { verificationToken, verificationTokenExpires } =
-      VerificationService.generateTokenEmail()
-
-    newUser.verificationToken = verificationToken
-    newUser.verificationTokenExpires = verificationTokenExpires
-
-    const savedUser = await newUser.save()
-
     const verificationEmailResult =
-      await VerificationService.sendVerificationEmail({
-        email,
-        token: verificationToken,
-        name,
-      })
+      await VerificationService.handleUnverifiedUser(newUser)
 
-    if (!verificationEmailResult.ok) {
+    if (!verificationEmailResult.emailSent) {
       console.log(
         'Error from verification email: ',
-        verificationEmailResult.error
+        verificationEmailResult.emailError
       )
       res.status(201).json({
         message:
@@ -58,7 +46,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     res.status(201).json({
       message: 'User created successfully. Please verify your email.',
       emailSent: true,
-      user: savedUser,
+      user: newUser,
     })
   } catch (err) {
     console.error(err)
@@ -114,6 +102,7 @@ export const login = async (req: Request, res: Response) => {
       res.status(409).json({
         message: 'Email is not verified. A verification email has been sent',
         emailSent: true,
+        email: user.email,
       })
 
       return
