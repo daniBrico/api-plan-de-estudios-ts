@@ -30,6 +30,10 @@ type VerificationResult =
   | { status: 'MAX_ATTEMPTS_REACHED' }
   | { status: 'SEND_FAILED' }
 
+interface CheckVerificationStatusReturn {
+  statusCode: 'TOKEN_INVALID' | 'TOKEN_EXPIRED' | 'TOKEN_VALID'
+}
+
 export class VerificationService {
   static async handleUnverifiedUser(user: User): Promise<VerificationResult> {
     const decision = this.canSendVerificationEmail(user)
@@ -112,14 +116,14 @@ export class VerificationService {
     }
   }
 
-  static async checkVerificationStatus(user: User) {
+  static checkVerificationStatus(user: User): CheckVerificationStatusReturn {
     if (!user.verificationToken || !user.verificationTokenExpires)
-      return { verified: false, action: 'generateNewToken' }
+      return { statusCode: 'TOKEN_INVALID' }
 
     if (user.verificationTokenExpires < new Date())
-      return { verified: false, action: 'expiredToken' }
+      return { statusCode: 'TOKEN_EXPIRED' }
 
-    return { verified: true, action: 'resendEmail' }
+    return { statusCode: 'TOKEN_VALID' }
   }
 
   static generateTokenEmail = () => {
