@@ -26,17 +26,14 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     newUser.password = await newUser.encryptPassword(password)
 
-    const verificationEmailResult =
-      await VerificationService.handleUnverifiedUser(newUser)
+    await newUser.save()
+    const result = await VerificationService.handleUnverifiedUser(newUser)
 
-    if (!verificationEmailResult.emailSent) {
-      console.log(
-        'Error from verification email: ',
-        verificationEmailResult.emailError
-      )
+    if (result.status === 'SEND_FAILED') {
       res.status(201).json({
         message:
           'User created, but verification email could not be sent. Please request a new verification email.',
+        code: 'VERIFICATION_EMAIL_SEND_FAILED',
         emailSent: false,
       })
 
@@ -46,7 +43,8 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     res.status(201).json({
       message: 'User created successfully. Please verify your email.',
       emailSent: true,
-      user: newUser,
+      code: 'EMAIL_SENT',
+      email: newUser.email,
     })
   } catch (err) {
     console.error(err)
@@ -85,25 +83,55 @@ export const login = async (req: Request, res: Response) => {
     }
 
     if (!user.isVerified) {
-      const verificationResult = await VerificationService.handleUnverifiedUser(
-        user
-      )
+      const result = await VerificationService.handleUnverifiedUser(user)
 
-      if (!verificationResult.emailSent) {
-        res.status(500).json({
-          message:
-            'User created, but verification email could not be sent. Please request a new verification email.',
-          emailSent: false,
-        })
+      switch (result.status) {
+        case 'EMAIL_SENT': {
+          res.status(409).json({
+            message: 'Email not verified. We sent you a verification email.',
+            errorCode: 'EMAIL_VERIFICATION_REQUIRED',
+            emailSent: true,
+          })
 
-        return
+          break
+        }
+
+        case 'TOO_SOON': {
+          res.status(429).json({
+            message:
+              'A verification email was sent recently. Please wait a few minutes.',
+            errorCode: 'VERIFICATION_EMAIL_TOO_SOON',
+            emailSent: false,
+          })
+
+          break
+        }
+
+        case 'MAX_ATTEMPTS_REACHED': {
+          res.status(429).json({
+            message:
+              'You have reached the maximum number of verification email attempts today.',
+            errorCode: 'VERIFICATION_EMAIL_LIMITE_REACHED',
+            emailSent: false,
+          })
+
+          break
+        }
+
+        case 'SEND_FAILED': {
+          res.status(503).json({
+            message:
+              'We could not send the verification email. Please try again later.',
+            errorCode: 'VERIFICATION_EMAIL_SEND_FAILED',
+            emailSent: false,
+          })
+
+          return
+        }
+
+        default:
+          break
       }
-
-      res.status(409).json({
-        message: 'Email is not verified. A verification email has been sent',
-        emailSent: true,
-        email: user.email,
-      })
 
       return
     }
@@ -124,6 +152,7 @@ export const login = async (req: Request, res: Response) => {
         lastName: user.lastName,
         email: user.email,
       },
+      code: 'LOGIN_SUCCESSFUL',
     })
   } catch (err) {
     res.status(500).json({
