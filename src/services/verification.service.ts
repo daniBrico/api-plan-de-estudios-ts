@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { User } from '../types/types'
 import { Temporal } from '@js-temporal/polyfill'
 import { Resend } from 'resend'
+import { VERIFICATION_CONFIG, ENV } from '../config/config'
 
 interface SendVerificationEmailProps {
   email: string
@@ -9,39 +10,105 @@ interface SendVerificationEmailProps {
   name: string
 }
 
-const { RESEND_API_KEY, FRONTEND_URL_LOCAL } = process.env
+const { FRONTEND_URL_LOCAL } = process.env
 
-const resend = new Resend(RESEND_API_KEY)
+const resend = new Resend(ENV.RESEND_API_KEY)
+
+const {
+  MIN_RESEND_INTERVAL_MINUTES,
+  MAX_EMAIL_ATTEMPTS_PER_DAY,
+  TOKEN_EXPIRATION_HOURS,
+} = VERIFICATION_CONFIG
+
+type VerificationDecision =
+  | { action: 'BLOCKED'; reason: string }
+  | { action: 'SEND'; regenerateToken: boolean }
+
+type VerificationResult =
+  | { status: 'EMAIL_SENT' }
+  | { status: 'TOO_SOON' }
+  | { status: 'MAX_ATTEMPTS_REACHED' }
+  | { status: 'SEND_FAILED' }
 
 export class VerificationService {
-  static async handleUnverifiedUser(user: User) {
-    const verificationStatus = await this.checkVerificationStatus(user)
+  static async handleUnverifiedUser(user: User): Promise<VerificationResult> {
+    const decision = this.canSendVerificationEmail(user)
 
-    const shouldGenerateToken =
-      verificationStatus.action === 'generateNewToken' ||
-      verificationStatus.action === 'expiredToken'
+    if (decision.action === 'BLOCKED')
+      return {
+        status:
+          decision.reason === 'TOO_SOON' ? 'TOO_SOON' : 'MAX_ATTEMPTS_REACHED',
+      }
 
-    let { verificationToken, verificationTokenExpires } = user
-
-    if (shouldGenerateToken || !verificationToken) {
-      const generated = this.generateTokenEmail()
-      verificationToken = generated.verificationToken
-      verificationTokenExpires = generated.verificationTokenExpires
-
+    if (decision.regenerateToken) {
+      const { verificationToken, verificationTokenExpires } =
+        this.generateTokenEmail()
       user.verificationToken = verificationToken
       user.verificationTokenExpires = verificationTokenExpires
-      await user.save()
     }
 
     const emailResult = await this.sendVerificationEmail({
       email: user.email,
-      token: verificationToken,
+      token: user.verificationToken!,
       name: user.name,
     })
 
+    if (!emailResult.ok) return { status: 'SEND_FAILED' }
+
+    user.lastVerificationEmailSentAt = new Date()
+    user.verificationEmailAttempts += 1
+    await user.save()
+
+    return { status: 'EMAIL_SENT' }
+  }
+
+  static canSendVerificationEmail(user: User): VerificationDecision {
+    const now = Temporal.Now.instant()
+
+    // Daily reset of attempts
+    // Reset daily verification email attempts if the last email was sent on a previous calendar day
+    if (user.lastVerificationEmailSentAt) {
+      const latSentDay = Temporal.Instant.from(
+        user.lastVerificationEmailSentAt.toISOString()
+      )
+        .toZonedDateTimeISO(Temporal.Now.timeZoneId())
+        .toPlainDate()
+
+      const today = Temporal.Now.plainDateISO()
+
+      if (!latSentDay.equals(today)) user.verificationEmailAttempts = 0
+    }
+
+    // Max attempts
+    if (user.verificationEmailAttempts >= MAX_EMAIL_ATTEMPTS_PER_DAY)
+      return {
+        action: 'BLOCKED',
+        reason: 'MAX_ATTEMPTS_REACHED',
+      }
+
+    if (user.lastVerificationEmailSentAt) {
+      const lastSent = Temporal.Instant.from(
+        user.lastVerificationEmailSentAt.toISOString()
+      )
+
+      const diff = now.since(lastSent, { largestUnit: 'minutes' })
+
+      if (diff.minutes < MIN_RESEND_INTERVAL_MINUTES)
+        return {
+          action: 'BLOCKED',
+          reason: 'TOO_SOON',
+        }
+    }
+
+    // Invalid or expired token
+    const shouldRegenerateToken =
+      !user.verificationToken ||
+      !user.verificationTokenExpires ||
+      user.verificationTokenExpires.getTime() < now.epochMilliseconds
+
     return {
-      emailSent: emailResult.ok,
-      emailError: emailResult.error,
+      action: 'SEND',
+      regenerateToken: shouldRegenerateToken,
     }
   }
 
@@ -58,7 +125,9 @@ export class VerificationService {
   static generateTokenEmail = () => {
     const verificationToken = randomUUID()
     const verificationTokenExpires = new Date(
-      Temporal.Now.instant().add({ hours: 24 }).epochMilliseconds
+      Temporal.Now.instant().add({
+        hours: TOKEN_EXPIRATION_HOURS,
+      }).epochMilliseconds
     )
 
     return { verificationToken, verificationTokenExpires }
@@ -70,7 +139,7 @@ export class VerificationService {
     name,
   }: SendVerificationEmailProps) => {
     try {
-      const verifyUrl = `${FRONTEND_URL_LOCAL}/auth/verify-email?token=${token}`
+      const verifyUrl = `${FRONTEND_URL_LOCAL}/verify/email?token=${token}`
 
       const { error } = await resend.emails.send({
         from: 'Soporte <no-reply@resend.dev>',

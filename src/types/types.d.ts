@@ -32,7 +32,7 @@ export interface User extends Document {
   verificationToken?: string | null
   verificationTokenExpires?: Date | null
   lastVerificationEmailSentAt?: Date | null
-  verificationEmailAttempts?: number
+  verificationEmailAttempts: number
   encryptPassword(password: string): Promise<string>
   matchPassword(password: string): Promise<boolean>
   createdAt?: Date
