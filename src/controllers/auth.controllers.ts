@@ -212,27 +212,40 @@ export const verifyEmail = async (req: Request, res: Response) => {
       return
     }
 
-    if (!userFounded.verificationTokenExpires) {
-      res.status(500).json({
-        message: 'Token verification timer not exist.',
-        success: false,
-        errorCode: 'TOKEN_INVALID',
-      })
-      return
-    }
+    const verificationResult =
+      VerificationService.checkVerificationStatus(userFounded)
 
-    if (userFounded.verificationTokenExpires < new Date()) {
-      res.status(400).json({
-        message: 'Verification link expired.',
-        success: false,
-        errorCode: 'TOKEN_EXPIRED',
-      })
+    if (verificationResult.statusCode !== 'TOKEN_VALID') {
+      switch (verificationResult.statusCode) {
+        case 'TOKEN_INVALID': {
+          res.status(500).json({
+            message: 'Token verification timer not exist.',
+            success: false,
+            errorCode: 'TOKEN_INVALID',
+          })
+
+          break
+        }
+
+        case 'TOKEN_EXPIRED': {
+          res.status(400).json({
+            message: 'Verification link expired.',
+            success: false,
+            errorCode: 'TOKEN_EXPIRED',
+          })
+
+          break
+        }
+      }
+
       return
     }
 
     userFounded.isVerified = true
     userFounded.verificationToken = null
     userFounded.verificationTokenExpires = null
+    userFounded.lastVerificationEmailSentAt = null
+    userFounded.verificationEmailAttempts = 0
 
     await userFounded.save()
 
