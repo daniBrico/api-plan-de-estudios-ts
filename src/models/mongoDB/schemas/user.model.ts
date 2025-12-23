@@ -1,6 +1,29 @@
 import { Schema, model } from 'mongoose'
 import bcrypt from 'bcrypt'
-import { UserDocument } from '../../../types/domain/user'
+import { PublicUser, UserDocument } from '../../../types/domain/user'
+
+type UserTransformReturn = PublicUser & {
+  password?: string
+  __v?: number
+  createdAt?: Date
+  updatedAt?: Date
+  verificationToken?: string | null
+  verificationTokenExpires?: Date | null
+  lastVerificationEmailSentAt?: Date | null
+  verificationEmailAttempts?: number
+}
+
+const userTransform = (_: unknown, ret: UserTransformReturn): PublicUser => {
+  delete ret.password
+  delete ret.__v
+  delete ret.createdAt
+  delete ret.updatedAt
+  delete ret.verificationToken
+  delete ret.verificationTokenExpires
+  delete ret.lastVerificationEmailSentAt
+  delete ret.verificationEmailAttempts
+  return ret
+}
 
 const UserSchema = new Schema<UserDocument>(
   {
@@ -47,30 +70,10 @@ const UserSchema = new Schema<UserDocument>(
   {
     timestamps: true,
     toObject: {
-      transform: (_, ret: any) => {
-        delete ret.password
-        delete ret.__v
-        delete ret.createdAt
-        delete ret.updatedAt
-        delete ret.verificationToken
-        delete ret.verificationTokenExpires
-        delete ret.lastVerificationEmailSentAt
-        delete ret.verificationEmailAttempts
-        return ret
-      },
+      transform: userTransform,
     },
     toJSON: {
-      transform: (_, ret: any) => {
-        delete ret.password
-        delete ret.__v
-        delete ret.createdAt
-        delete ret.updatedAt
-        delete ret.verificationToken
-        delete ret.verificationTokenExpires
-        delete ret.lastVerificationEmailSentAt
-        delete ret.verificationEmailAttempts
-        return ret
-      },
+      transform: userTransform,
     },
   }
 )
@@ -84,8 +87,6 @@ UserSchema.methods.matchPassword = async function (password: string) {
   return await bcrypt.compare(password, this.password)
 }
 
-// export default model('User', UserSchema)
-
-const UserModel = model<UserDocument>('Subject', UserSchema)
+const UserModel = model<UserDocument>('User', UserSchema)
 
 export default UserModel

@@ -7,14 +7,23 @@ export interface User {
   verificationTokenExpires?: Date | null
   lastVerificationEmailSentAt?: Date | null
   verificationEmailAttempts: number
-  createdAt?: Date
-  updatedAt?: Date
 }
 
 export interface UserDocument extends User, Document {
   password: string
+  createdAt?: Date
+  updatedAt?: Date
   encryptPassword(password: string): Promise<string>
   matchPassword(password: string): Promise<boolean>
 }
 
 export interface userCareer {}
+
+/* Public types */
+
+export interface PublicUser {
+  name: string
+  lastName: string
+  email: string
+  isVerified: boolean
+}

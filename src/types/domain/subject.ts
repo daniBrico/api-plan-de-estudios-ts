@@ -65,3 +65,7 @@ export interface PopulatedSubjectDocument {
   offering?: string
   correlatives: { code: string }[]
 }
+
+/* Public types */
+
+export interface PublicSubject extends Subject {}

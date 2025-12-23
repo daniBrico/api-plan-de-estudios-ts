@@ -29,5 +29,21 @@ const UserCareerSchema = new Schema(
   },
   {
     timestamps: true,
+    toObject: {
+      transform: (_, ret: any) => {
+        delete ret.__v
+        delete ret.createdAt
+        delete ret.updatedAt
+        return ret
+      },
+    },
+    toJSON: {
+      transform: (_, ret: any) => {
+        delete ret.__v
+        delete ret.createdAt
+        delete ret.updatedAt
+        return ret
+      },
+    },
   }
 )

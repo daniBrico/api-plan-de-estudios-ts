@@ -1,40 +1,58 @@
 import { Schema, model } from 'mongoose'
 import { CareerDocument } from '../../../types/domain/career'
 
-const CareerSchema = new Schema<CareerDocument>({
-  name: {
-    type: String,
-    required: true,
-  },
-  duration: {
-    type: Number,
-    required: true,
-  },
-  intermediateDegree: {
-    type: String,
-  },
-  intermediateDegreeDuration: {
-    type: Number,
-  },
-  subjectsByYear: {
-    type: [
-      {
-        year: {
-          type: String,
-          required: true,
-        },
-        subjects: [
-          {
-            type: Schema.Types.ObjectId,
-            ref: 'Subject',
+const careerTransform = (_: unknown, ret: any) => {
+  delete ret.__v
+  delete ret.createdAt
+  delete ret.updatedAt
+  return ret
+}
+
+const CareerSchema = new Schema<CareerDocument>(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    duration: {
+      type: Number,
+      required: true,
+    },
+    intermediateDegree: {
+      type: String,
+    },
+    intermediateDegreeDuration: {
+      type: Number,
+    },
+    subjectsByYear: {
+      type: [
+        {
+          year: {
+            type: String,
             required: true,
           },
-        ],
-      },
-    ],
-    required: true,
+          subjects: [
+            {
+              type: Schema.Types.ObjectId,
+              ref: 'Subject',
+              required: true,
+            },
+          ],
+        },
+      ],
+      required: true,
+    },
   },
-})
+  {
+    timestamps: true,
+    toObject: {
+      transform: careerTransform,
+    },
+    toJSON: {
+      transform: careerTransform,
+    },
+  }
+)
 
 const CareerModel = model<CareerDocument>('Career', CareerSchema)
 
