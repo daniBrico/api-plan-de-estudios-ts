@@ -1,7 +1,7 @@
 import CareerModel from '../models/mongoDB/schemas/career.model'
 import SubjectModel from '../models/mongoDB/schemas/subject.model'
 import { Request, Response } from 'express'
-import { PopulatedCareer } from '../types/types'
+import { PopulatedCareer } from '../types/domain/career'
 
 export const getCareerNames = async (
   _req: Request,
@@ -41,14 +41,14 @@ export const getCareerByID = async (
           select: 'code -_id',
         },
       })
-      .lean()
+      .lean<PopulatedCareer>()
 
     if (!career) {
       res.status(404).json({ message: 'Career Not Found' })
       return
     }
 
-    const populatedCareer = career as unknown as PopulatedCareer
+    const populatedCareer = career
 
     const transformedCareer = {
       ...populatedCareer,

@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
-import { Subject } from '../../../types/types'
+import { SubjectDocument } from '../../../types/domain/subject'
 
-const SubjectSchema = new Schema<Subject>({
+const SubjectSchema = new Schema<SubjectDocument>({
   name: {
     longName: {
       type: String,
@@ -26,6 +26,6 @@ const SubjectSchema = new Schema<Subject>({
   ],
 })
 
-const SubjectModel = model<Subject>('Subject', SubjectSchema)
+const SubjectModel = model<SubjectDocument>('Subject', SubjectSchema)
 
 export default SubjectModel

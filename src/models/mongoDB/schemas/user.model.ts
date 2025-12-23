@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose'
 import bcrypt from 'bcrypt'
-import { User } from '../../../types/types'
+import { UserDocument } from '../../../types/domain/user'
 
-const UserSchema = new Schema<User>(
+const UserSchema = new Schema<UserDocument>(
   {
     name: {
       type: String,
@@ -84,4 +84,8 @@ UserSchema.methods.matchPassword = async function (password: string) {
   return await bcrypt.compare(password, this.password)
 }
 
-export default model('User', UserSchema)
+// export default model('User', UserSchema)
+
+const UserModel = model<UserDocument>('Subject', UserSchema)
+
+export default UserModel
