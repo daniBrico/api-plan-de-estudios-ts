@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import { User } from '../types/types'
+import { UserDocument } from '../types/domain/user'
 import { Temporal } from '@js-temporal/polyfill'
 import { Resend } from 'resend'
 import { VERIFICATION_CONFIG, ENV } from '../config/config'
@@ -35,7 +35,9 @@ interface CheckVerificationStatusReturn {
 }
 
 export class VerificationService {
-  static async handleUnverifiedUser(user: User): Promise<VerificationResult> {
+  static async handleUnverifiedUser(
+    user: UserDocument
+  ): Promise<VerificationResult> {
     const decision = this.canSendVerificationEmail(user)
 
     if (decision.action === 'BLOCKED')
@@ -66,7 +68,7 @@ export class VerificationService {
     return { status: 'EMAIL_SENT' }
   }
 
-  static canSendVerificationEmail(user: User): VerificationDecision {
+  static canSendVerificationEmail(user: UserDocument): VerificationDecision {
     const now = Temporal.Now.instant()
 
     // Daily reset of attempts
@@ -116,7 +118,9 @@ export class VerificationService {
     }
   }
 
-  static checkVerificationStatus(user: User): CheckVerificationStatusReturn {
+  static checkVerificationStatus(
+    user: UserDocument
+  ): CheckVerificationStatusReturn {
     if (!user.verificationToken || !user.verificationTokenExpires)
       return { statusCode: 'TOKEN_INVALID' }
 
