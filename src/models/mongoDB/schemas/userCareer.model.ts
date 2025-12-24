@@ -1,6 +1,16 @@
-import { Schema } from 'mongoose'
+import { model, Schema } from 'mongoose'
+import { UserCareer, UserCareerDocument } from '../../../types/domain/user'
 
-const UserCareerSchema = new Schema(
+const userCareerTransform = (_: unknown, ret: any) => {
+  ret.id = ret._id.toString()
+  delete ret._id
+  delete ret.__v
+  delete ret.createdAt
+  delete ret.updatedAt
+  return ret
+}
+
+const UserCareerSchema = new Schema<UserCareerDocument>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -19,10 +29,16 @@ const UserCareerSchema = new Schema(
           ref: 'Subject',
           required: true,
         },
-        status: {
+        state: {
           type: String,
-          enum: ['pending', 'in_progress', 'approved', 'failed'],
-          required: true,
+          enum: [
+            'aprobada',
+            'cursando',
+            'regular',
+            'recursar',
+            'equivalencia',
+            null,
+          ],
         },
       },
     ],
@@ -30,20 +46,17 @@ const UserCareerSchema = new Schema(
   {
     timestamps: true,
     toObject: {
-      transform: (_, ret: any) => {
-        delete ret.__v
-        delete ret.createdAt
-        delete ret.updatedAt
-        return ret
-      },
+      transform: userCareerTransform,
     },
     toJSON: {
-      transform: (_, ret: any) => {
-        delete ret.__v
-        delete ret.createdAt
-        delete ret.updatedAt
-        return ret
-      },
+      transform: userCareerTransform,
     },
   }
 )
+
+const UserCareerModel = model<UserCareerDocument>(
+  'UserCareer',
+  UserCareerSchema
+)
+
+export default UserCareerModel

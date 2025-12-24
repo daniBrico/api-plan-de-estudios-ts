@@ -1,3 +1,5 @@
+import { HydratedDocument, Types } from 'mongoose'
+
 export interface User {
   name: string
   lastName: string
@@ -9,15 +11,40 @@ export interface User {
   verificationEmailAttempts: number
 }
 
-export interface UserDocument extends User, Document {
+export type UserDocument = HydratedDocument<User> & {
   password: string
-  createdAt?: Date
-  updatedAt?: Date
   encryptPassword(password: string): Promise<string>
   matchPassword(password: string): Promise<boolean>
 }
 
-export interface userCareer {}
+/* User career */
+
+export type SubjectState =
+  | 'aprobada'
+  | 'cursando'
+  | 'regular'
+  | 'recursar'
+  | 'equivalencia'
+  | null
+
+export interface UserCareer {
+  id: string
+  user: string
+  career: string
+  subjectStates: {
+    subject: string
+    state: SubjectState
+  }[]
+}
+
+export type UserCareerDocument = HydratedDocument<{
+  user: Types.ObjectId
+  career: Types.ObjectId
+  subjectStates: {
+    subject: Types.ObjectId
+    state: SubjectState
+  }[]
+}>
 
 /* Public types */
 

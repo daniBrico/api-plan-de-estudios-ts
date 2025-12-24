@@ -44,7 +44,6 @@ const CareerSchema = new Schema<CareerDocument>(
     },
   },
   {
-    timestamps: true,
     toObject: {
       transform: careerTransform,
     },
