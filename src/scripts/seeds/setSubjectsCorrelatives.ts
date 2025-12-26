@@ -3,7 +3,8 @@ import {
   closeDatabaseConnection,
   openDatabaseConnection,
 } from '../../models/mongoDB/database.js'
-import SubjectModel from '../../models/mongoDB/schemas/subject.model.js'
+import SubjectModel from '../../models/mongoDB/schemas/subject.model'
+import { Types } from 'mongoose'
 
 openDatabaseConnection()
   .then(() => {
@@ -21,7 +22,7 @@ const setSubjectsCorrelatives = async () => {
     // Recorro el arreglo de objetos subjectsCorrelatives
     await Promise.all(
       subjectsCorrelativesData.map(async (correlative) => {
-        let idCorrelatives: string[] = []
+        let idCorrelatives: Types.ObjectId[] = []
 
         // Por cada materia, accedo a sus correlativas
         correlative.correlatives.forEach((correlative) => {
@@ -30,7 +31,7 @@ const setSubjectsCorrelatives = async () => {
             (subject) => subject.code === correlative
           )
           // Si la encuentro, me guardo su ID en el arreglo idCorrelatives
-          if (subjectFind) idCorrelatives.push(subjectFind._id as string)
+          if (subjectFind) idCorrelatives.push(subjectFind._id)
         })
 
         await SubjectModel.findOneAndUpdate(
