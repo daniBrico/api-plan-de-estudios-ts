@@ -12,3 +12,9 @@ export const VERIFICATION_CONFIG = {
   ),
   TOKEN_EXPIRATION_HOURS: Number(process.env.TOKEN_EXPIRATION_HOURS ?? 24),
 }
+
+export const FRONTEND_URLS = {
+  LOCAL: process.env.FRONTEND_URL_LOCAL,
+  LAN: process.env.FRONTEND_URL_LAN,
+  GITHUB_PAGES: process.env.FRONTEND_URL_GITHUB_PAGES,
+}

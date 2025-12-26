@@ -3,23 +3,14 @@ import careerRoutes from './routes/career.routes'
 import authRoutes from './routes/auth.routes'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import { FRONTEND_URLS } from './config/config'
 
 const app = express()
 
-const {
-  FRONTEND_URL_LOCAL,
-  FRONTEND_URL_LAN,
-  FRONTEND_URL_GITHUB_PAGES,
-  FRONTEND_URL_RENDER,
-} = process.env
+const { LOCAL, LAN, GITHUB_PAGES } = FRONTEND_URLS
 
 const corsOptions = {
-  origin: [
-    `${FRONTEND_URL_LOCAL}`,
-    `${FRONTEND_URL_LAN}`,
-    `${FRONTEND_URL_GITHUB_PAGES}`,
-    `${FRONTEND_URL_RENDER}`,
-  ],
+  origin: [`${LOCAL}`, `${LAN}`, `${GITHUB_PAGES}`],
   methods: 'GET',
   credentials: true,
 }
