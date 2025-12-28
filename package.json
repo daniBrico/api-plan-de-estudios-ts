@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --env-file=.env ./src/index.ts",
+    "dev": "ts-node-dev ./src/index.ts",
     "tsc": "tsc",
-    "start": "node --env-file=.env ./dist/index.js",
-    "setSubjects": "tsc && node --env-file=.env ./dist/scripts/seeds/setSubjects.js",
-    "setSubjectsCorrelatives": "tsc && node --env-file=.env ./dist/scripts/seeds/setSubjectsCorrelatives.js",
-    "setCareers": "tsc && node --env-file=.env ./dist/scripts/seeds/setCareers.js",
+    "start": "node ./dist/index.js",
+    "setSubjects": "tsc && node ./dist/scripts/seeds/setSubjects.js",
+    "setSubjectsCorrelatives": "tsc && node ./dist/scripts/seeds/setSubjectsCorrelatives.js",
+    "setCareers": "tsc && node ./dist/scripts/seeds/setCareers.js",
     "test": "jest"
   },
   "keywords": [],
