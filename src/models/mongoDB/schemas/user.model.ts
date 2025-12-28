@@ -1,19 +1,10 @@
 import { Schema, model } from 'mongoose'
 import bcrypt from 'bcrypt'
-import { PublicUser, UserDocument } from '../../../types/domain/user'
+import { UserDocument } from '../../../types/domain/user'
 
-type UserTransformReturn = PublicUser & {
-  password?: string
-  __v?: number
-  createdAt?: Date
-  updatedAt?: Date
-  verificationToken?: string | null
-  verificationTokenExpires?: Date | null
-  lastVerificationEmailSentAt?: Date | null
-  verificationEmailAttempts?: number
-}
-
-const userTransform = (_: unknown, ret: UserTransformReturn): PublicUser => {
+const userTransform = (_: unknown, ret: any) => {
+  ret.id = ret._id.toString()
+  delete ret._id
   delete ret.password
   delete ret.__v
   delete ret.createdAt

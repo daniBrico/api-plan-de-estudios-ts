@@ -16,7 +16,7 @@ export const authMiddleware = (
     const decoded = verifyAccessToken(token)
 
     req.user = {
-      _id: decoded._id,
+      id: decoded.id,
       name: decoded.name,
       lastName: decoded.lastName,
       email: decoded.email,

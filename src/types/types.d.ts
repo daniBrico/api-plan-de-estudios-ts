@@ -2,7 +2,7 @@ import { Document, Schema } from 'mongoose'
 
 /* jwt */
 export interface TokenPayload {
-  _id: Types.ObjectId
+  id: Types.ObjectId
   name: string
   lastName: string
   email: string
