@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import UserModel from '../models/mongoDB/schemas/user.model'
 import { createAccessToken } from '../utils/jwt'
-import bcrypt from 'bcrypt'
 import { VerificationService } from '../services/verification.service'
+import { loginService } from '../services/auth.service'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -52,40 +52,14 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-export const login = async (req: Request, res: Response) => {
+export const loginController = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body
 
-    if (!email || !password) {
-      res.status(400).json({
-        errorCode: 'INVALID_CREDENTIALS',
-        message: 'Invalid credentials',
-      })
-      return
-    }
+    const authServiceResult = await loginService(email, password)
 
-    const user = await UserModel.findOne({ email })
-    if (!user) {
-      res.status(401).json({
-        errorCode: 'INVALID_CREDENTIALS',
-        message: 'Invalid credentials',
-      })
-      return
-    }
-
-    const passMatch = await bcrypt.compare(password, user.password)
-    if (!passMatch) {
-      res.status(401).json({
-        errorCode: 'INVALID_CREDENTIALS',
-        message: 'Invalid credentials',
-      })
-      return
-    }
-
-    if (!user.isVerified) {
-      const result = await VerificationService.handleUnverifiedUser(user)
-
-      switch (result.status) {
+    if (authServiceResult.status === 'NOT_VERIFIED') {
+      switch (authServiceResult.verification?.status) {
         case 'EMAIL_SENT': {
           res.status(409).json({
             message: 'Email not verified. We sent you a verification email.',
@@ -126,7 +100,7 @@ export const login = async (req: Request, res: Response) => {
             emailSent: false,
           })
 
-          return
+          break
         }
 
         default:
@@ -136,13 +110,20 @@ export const login = async (req: Request, res: Response) => {
       return
     }
 
+    const { user } = authServiceResult
+
     const token = createAccessToken({
-      _id: user._id,
+      id: user._id,
       name: user.name,
       lastName: user.lastName,
       email: user.email,
     })
-    res.cookie('token', token)
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    })
 
     res.status(200).json({
       message: 'Login was successful',
@@ -169,7 +150,7 @@ export const verifyToken = async (
   res: Response
 ): Promise<void> => {
   try {
-    const _id = req.user?._id
+    const _id = req.user?.id
 
     const userFounded = await UserModel.findById(_id)
 
