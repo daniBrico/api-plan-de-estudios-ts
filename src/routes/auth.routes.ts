@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import {
-  login,
+  loginController,
   register,
   verifyEmail,
   verifyToken,
@@ -10,7 +10,7 @@ import { authMiddleware } from '../middlewares/auth.middleware'
 const router = Router()
 
 router.post('/register', register)
-router.post('/login', login)
+router.post('/login', loginController)
 
 router.post('/verify/email', verifyEmail)
 router.get('/verify/token', authMiddleware, verifyToken)
