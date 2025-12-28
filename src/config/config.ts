@@ -1,6 +1,7 @@
 export const ENV = {
   JWT_SECRET: process.env.JWT_SECRET,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
+  PORT: process.env.PORT ?? 3000,
 }
 
 export const VERIFICATION_CONFIG = {

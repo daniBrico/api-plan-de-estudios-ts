@@ -1,9 +1,11 @@
+import 'dotenv/config'
 import { createServer } from 'node:http'
 import { app } from './app'
 import { openDatabaseConnection } from './models/mongoDB/database'
+import { ENV } from './config/config'
 
 // Tengo que configurar esta variable de entorno
-const port = process.env.PORT ?? 3000
+const port = ENV.PORT
 
 // Creación del servidor http
 const server = createServer(app)

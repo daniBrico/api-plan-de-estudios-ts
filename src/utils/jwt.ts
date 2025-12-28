@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken'
 import { TokenPayload } from '../types/types'
+import { ENV } from '../config/config'
 
-const { JWT_SECRET } = process.env
+const JWT_SECRET = ENV.JWT_SECRET
 
 if (!JWT_SECRET)
   throw new Error('Token is not defined in environment variables')
