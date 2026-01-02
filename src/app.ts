@@ -4,6 +4,7 @@ import authRoutes from './routes/auth.routes'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { FRONTEND_URLS } from './config/config'
+import { errorHandler } from './middlewares/errorHandler.middleware'
 
 const app = express()
 
@@ -26,5 +27,7 @@ app.use('/auth', authRoutes)
 
 /* Career routes */
 app.use('/career', careerRoutes)
+
+app.use(errorHandler)
 
 export { app }

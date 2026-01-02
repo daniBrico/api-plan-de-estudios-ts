@@ -3,6 +3,7 @@ import UserModel from '../models/mongoDB/schemas/user.model'
 import { createAccessToken } from '../utils/jwt'
 import { VerificationService } from '../services/verification.service'
 import { loginService } from '../services/auth.service'
+import { verificationResponses } from '../constants/AuthResponses'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -53,96 +54,44 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 }
 
 export const loginController = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body
+  const { email, password } = req.body
 
-    const authServiceResult = await loginService(email, password)
+  const authServiceResult = await loginService(email, password)
 
-    if (authServiceResult.status === 'NOT_VERIFIED') {
-      switch (authServiceResult.verification?.status) {
-        case 'EMAIL_SENT': {
-          res.status(409).json({
-            message: 'Email not verified. We sent you a verification email.',
-            errorCode: 'EMAIL_VERIFICATION_REQUIRED',
-            emailSent: true,
-          })
+  if (authServiceResult.status === 'NOT_VERIFIED') {
+    const response =
+      verificationResponses[authServiceResult.verification?.status]
 
-          break
-        }
+    res.status(response.statusCode).json(response)
 
-        case 'TOO_SOON': {
-          res.status(429).json({
-            message:
-              'A verification email was sent recently. Please wait a few minutes.',
-            errorCode: 'VERIFICATION_EMAIL_TOO_SOON',
-            emailSent: false,
-          })
+    return
+  }
 
-          break
-        }
+  const { user } = authServiceResult
 
-        case 'MAX_ATTEMPTS_REACHED': {
-          res.status(429).json({
-            message:
-              'You have reached the maximum number of verification email attempts today.',
-            errorCode: 'VERIFICATION_EMAIL_LIMITE_REACHED',
-            emailSent: false,
-          })
+  const token = createAccessToken({
+    id: user._id,
+    name: user.name,
+    lastName: user.lastName,
+    email: user.email,
+  })
 
-          break
-        }
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  })
 
-        case 'SEND_FAILED': {
-          res.status(503).json({
-            message:
-              'We could not send the verification email. Please try again later.',
-            errorCode: 'VERIFICATION_EMAIL_SEND_FAILED',
-            emailSent: false,
-          })
-
-          break
-        }
-
-        default:
-          break
-      }
-
-      return
-    }
-
-    const { user } = authServiceResult
-
-    const token = createAccessToken({
-      id: user._id,
+  res.status(200).json({
+    message: 'Login was successful',
+    user: {
+      _id: user._id,
       name: user.name,
       lastName: user.lastName,
       email: user.email,
-    })
-
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-    })
-
-    res.status(200).json({
-      message: 'Login was successful',
-      user: {
-        _id: user._id,
-        name: user.name,
-        lastName: user.lastName,
-        email: user.email,
-      },
-      code: 'LOGIN_SUCCESSFUL',
-    })
-  } catch (err) {
-    res.status(500).json({
-      message:
-        err instanceof Error
-          ? `Error in login user: ${err.message}`
-          : 'Unknown error',
-    })
-  }
+    },
+    code: 'LOGIN_SUCCESSFUL',
+  })
 }
 
 export const verifyToken = async (
