@@ -6,4 +6,7 @@ export const AuthError = {
 
   emailIsNotVerified: () =>
     createAppError('Email not verified', 409, 'EMAIL_VERIFICATION_REQUIRED'),
+
+  emailAlreadyExists: () =>
+    createAppError('Email already in use', 409, 'EMAIL_ALREADY_EXISTS'),
 }
