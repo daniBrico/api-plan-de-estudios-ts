@@ -24,7 +24,7 @@ export const registerService = async (
 ): Promise<RegisterServiceResult> => {
   const user = await UserModel.findOne({ email })
 
-  if (!user) throw AuthError.emailAlreadyExists()
+  if (user) throw AuthError.emailAlreadyExists()
 
   const newUser = new UserModel({
     name,
