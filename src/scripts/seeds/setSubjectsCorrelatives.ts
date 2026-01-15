@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import subjectsCorrelativesData from '../data/subjectsCorrelative.json'
 import {
   closeDatabaseConnection,

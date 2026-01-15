@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import careersData from '../data/careers.json'
 import {
   closeDatabaseConnection,

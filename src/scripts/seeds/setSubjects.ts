@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import subjectsData from '../data/subjects.json'
 import {
   closeDatabaseConnection,
