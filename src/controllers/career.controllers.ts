@@ -30,40 +30,21 @@ export const getCareerByID = async (
   try {
     const id = req.params.id
 
-    const career = await CareerModel.findById(id)
-      .select('-__v')
-      .populate({
-        path: 'subjectsByYear.subjects',
-        model: SubjectModel,
-        select: '-_id -__v',
-        populate: {
-          path: 'correlatives',
-          select: 'code -_id',
-        },
-      })
-      .lean<PopulatedCareer>()
+    const career = await CareerModel.findById(id).populate({
+      path: 'subjectsByYear.subjects',
+      model: SubjectModel,
+      populate: {
+        path: 'correlatives',
+        select: 'code',
+      },
+    })
 
     if (!career) {
       res.status(404).json({ message: 'Career Not Found' })
       return
     }
 
-    const populatedCareer = career
-
-    const transformedCareer = {
-      ...populatedCareer,
-      subjectsByYear: populatedCareer.subjectsByYear.map((year) => ({
-        year: year.year,
-        subjects: year.subjects.map((subject) => ({
-          ...subject,
-          correlatives: subject.correlatives.map(
-            (correlative) => correlative.code
-          ),
-        })),
-      })),
-    }
-
-    res.json(transformedCareer)
+    res.json(career)
   } catch (err) {
     err instanceof Error
       ? res.status(500).json({ message: err.message })
