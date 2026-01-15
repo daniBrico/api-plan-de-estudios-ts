@@ -3,8 +3,10 @@ import bcrypt from 'bcrypt'
 import { UserDocument } from '../../../types/domain/user'
 
 const userTransform = (_: unknown, ret: any) => {
-  ret.id = ret._id.toString()
-  delete ret._id
+  if (ret._id) {
+    ret.id = ret._id.toString()
+    delete ret._id
+  }
   delete ret.password
   delete ret.__v
   delete ret.createdAt

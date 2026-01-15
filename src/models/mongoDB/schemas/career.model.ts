@@ -2,6 +2,10 @@ import { Schema, model } from 'mongoose'
 import { CareerDocument } from '../../../types/domain/career'
 
 const careerTransform = (_: unknown, ret: any) => {
+  if (ret._id) {
+    ret.id = ret._id.toString()
+    delete ret._id
+  }
   delete ret.__v
   delete ret.createdAt
   delete ret.updatedAt
@@ -27,6 +31,7 @@ const CareerSchema = new Schema<CareerDocument>(
     subjectsByYear: {
       type: [
         {
+          _id: false,
           year: {
             type: String,
             required: true,

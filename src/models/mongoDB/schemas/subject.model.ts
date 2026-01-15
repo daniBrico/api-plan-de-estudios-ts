@@ -2,6 +2,10 @@ import { Schema, model } from 'mongoose'
 import { SubjectDocument } from '../../../types/domain/subject'
 
 const subjectTransform = (_: unknown, ret: any) => {
+  if (ret._id) {
+    ret.id = ret._id.toString()
+    delete ret._id
+  }
   delete ret.__v
   return ret
 }
