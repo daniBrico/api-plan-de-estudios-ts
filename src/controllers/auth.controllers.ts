@@ -69,7 +69,7 @@ export const loginController = async (req: Request, res: Response) => {
   res.status(200).json({
     message: 'Login was successful',
     user: {
-      _id: user._id,
+      id: user._id,
       name: user.name,
       lastName: user.lastName,
       email: user.email,
@@ -83,9 +83,9 @@ export const verifyToken = async (
   res: Response
 ): Promise<void> => {
   try {
-    const _id = req.user?.id
+    const id = req.user?.id
 
-    const userFounded = await UserModel.findById(_id)
+    const userFounded = await UserModel.findById(id)
 
     if (!userFounded) {
       res.status(401).json({ message: 'Authentication error' })
@@ -95,7 +95,7 @@ export const verifyToken = async (
     res.status(200).json({
       message: 'Successful authentication',
       user: {
-        _id: userFounded._id,
+        id: userFounded._id,
         name: userFounded.name,
         lastName: userFounded.lastName,
         email: userFounded.email,

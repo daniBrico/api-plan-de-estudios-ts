@@ -45,7 +45,7 @@ interface CorrelativesDocument {
 /* Populated */
 
 export interface PopulatedSubject {
-  _id: string
+  id: string
   name: {
     longName: string
     shortName: string
