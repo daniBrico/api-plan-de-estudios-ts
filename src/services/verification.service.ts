@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { UserDocument } from '../types/domain/user'
 import { Temporal } from '@js-temporal/polyfill'
 import { Resend } from 'resend'
-import { VERIFICATION_CONFIG, ENV } from '../config/config'
+import { VERIFICATION_CONFIG, ENV, FRONTEND_URLS } from '../config/config'
 
 interface SendVerificationEmailProps {
   email: string
@@ -10,7 +10,7 @@ interface SendVerificationEmailProps {
   name: string
 }
 
-const { FRONTEND_URL_LOCAL } = process.env
+const { LOCAL } = FRONTEND_URLS
 
 const resend = new Resend(ENV.RESEND_API_KEY)
 
@@ -20,11 +20,12 @@ const {
   TOKEN_EXPIRATION_HOURS,
 } = VERIFICATION_CONFIG
 
-type VerificationDecision =
+// Debería estandarizar los valores posibles de reason
+export type canSendVerificationEmailReturn =
   | { action: 'BLOCKED'; reason: string }
   | { action: 'SEND'; regenerateToken: boolean }
 
-type VerificationResult =
+export type VerificationResult =
   | { status: 'EMAIL_SENT' }
   | { status: 'TOO_SOON' }
   | { status: 'MAX_ATTEMPTS_REACHED' }
@@ -32,6 +33,11 @@ type VerificationResult =
 
 interface CheckVerificationStatusReturn {
   statusCode: 'TOKEN_INVALID' | 'TOKEN_EXPIRED' | 'TOKEN_VALID'
+}
+
+interface GenerateTokenEmailReturn {
+  verificationToken: string
+  verificationTokenExpires: Date
 }
 
 export class VerificationService {
@@ -68,7 +74,9 @@ export class VerificationService {
     return { status: 'EMAIL_SENT' }
   }
 
-  static canSendVerificationEmail(user: UserDocument): VerificationDecision {
+  static canSendVerificationEmail(
+    user: UserDocument
+  ): canSendVerificationEmailReturn {
     const now = Temporal.Now.instant()
 
     // Daily reset of attempts
@@ -130,7 +138,7 @@ export class VerificationService {
     return { statusCode: 'TOKEN_VALID' }
   }
 
-  static generateTokenEmail = () => {
+  static generateTokenEmail = (): GenerateTokenEmailReturn => {
     const verificationToken = randomUUID()
     const verificationTokenExpires = new Date(
       Temporal.Now.instant().add({
@@ -147,7 +155,7 @@ export class VerificationService {
     name,
   }: SendVerificationEmailProps) => {
     try {
-      const verifyUrl = `${FRONTEND_URL_LOCAL}/verify/email?token=${token}`
+      const verifyUrl = `${LOCAL}/verify/email?token=${token}`
 
       const { error } = await resend.emails.send({
         from: 'Soporte <no-reply@resend.dev>',
