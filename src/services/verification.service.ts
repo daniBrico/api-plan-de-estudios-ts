@@ -155,7 +155,7 @@ export class VerificationService {
     name,
   }: SendVerificationEmailProps) => {
     try {
-      const verifyUrl = `${LOCAL}/verify/email?token=${token}`
+      const verifyURL = `${LOCAL}/#/verify/email?token=${token}`
 
       const { error } = await resend.emails.send({
         from: 'Soporte <no-reply@resend.dev>',
@@ -164,7 +164,7 @@ export class VerificationService {
         html: `
         <h2>Hola ${name}</h2>
         <p>Por favor, verifica tu cuenta haciendo click en el siguiente link:</p>
-        <a href="${verifyUrl}">${verifyUrl}</a>
+        <a href="${verifyURL}">${verifyURL}</a>
         <p>Este enlace vencerá en 24 horas.</p>
         `,
       })
