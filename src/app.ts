@@ -5,6 +5,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { FRONTEND_URLS } from './config/config'
 import { errorHandler } from './middlewares/errorHandler.middleware'
+import { globalLimiter } from './middlewares/rateLimit.middleware'
 
 const app = express()
 
@@ -16,16 +17,16 @@ const corsOptions = {
   credentials: true,
 }
 
+/* Global middlewares */
 app.use(cors(corsOptions))
-
 app.use(express.json())
-
 app.use(cookieParser())
 
-/* Auth routes */
-app.use('/auth', authRoutes)
+/* Rate limiting global */
+app.use(globalLimiter)
 
-/* Career routes */
+/* Routes */
+app.use('/auth', authRoutes)
 app.use('/career', careerRoutes)
 
 app.use(errorHandler)
