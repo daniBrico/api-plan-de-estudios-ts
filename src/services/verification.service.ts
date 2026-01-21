@@ -42,7 +42,7 @@ interface GenerateTokenEmailReturn {
 
 export class VerificationService {
   static async handleUnverifiedUser(
-    user: UserDocument
+    user: UserDocument,
   ): Promise<VerificationResult> {
     const decision = this.canSendVerificationEmail(user)
 
@@ -75,7 +75,7 @@ export class VerificationService {
   }
 
   static canSendVerificationEmail(
-    user: UserDocument
+    user: UserDocument,
   ): canSendVerificationEmailReturn {
     const now = Temporal.Now.instant()
 
@@ -83,7 +83,7 @@ export class VerificationService {
     // Reset daily verification email attempts if the last email was sent on a previous calendar day
     if (user.lastVerificationEmailSentAt) {
       const latSentDay = Temporal.Instant.from(
-        user.lastVerificationEmailSentAt.toISOString()
+        user.lastVerificationEmailSentAt.toISOString(),
       )
         .toZonedDateTimeISO(Temporal.Now.timeZoneId())
         .toPlainDate()
@@ -102,7 +102,7 @@ export class VerificationService {
 
     if (user.lastVerificationEmailSentAt) {
       const lastSent = Temporal.Instant.from(
-        user.lastVerificationEmailSentAt.toISOString()
+        user.lastVerificationEmailSentAt.toISOString(),
       )
 
       const diff = now.since(lastSent, { largestUnit: 'minutes' })
@@ -127,7 +127,7 @@ export class VerificationService {
   }
 
   static checkVerificationStatus(
-    user: UserDocument
+    user: UserDocument,
   ): CheckVerificationStatusReturn {
     if (!user.verificationToken || !user.verificationTokenExpires)
       return { statusCode: 'TOKEN_INVALID' }
@@ -143,7 +143,7 @@ export class VerificationService {
     const verificationTokenExpires = new Date(
       Temporal.Now.instant().add({
         hours: TOKEN_EXPIRATION_HOURS,
-      }).epochMilliseconds
+      }).epochMilliseconds,
     )
 
     return { verificationToken, verificationTokenExpires }
