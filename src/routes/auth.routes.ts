@@ -10,13 +10,28 @@ import { validate } from '../middlewares/validate.middleware'
 import { registerSchema } from '../schemas/auth/register.schema'
 import { loginSchema } from '../schemas/auth/login.schema'
 import { verifyEmailSchema } from '../schemas/auth/verifyEmail.schema'
+import {
+  loginLimiter,
+  registerLimiter,
+  verifyEmailLimiter,
+} from '../middlewares/rateLimit.middleware'
 
 const router = Router()
 
-router.post('/register', validate(registerSchema), registerController)
-router.post('/login', validate(loginSchema), loginController)
+router.post(
+  '/register',
+  registerLimiter,
+  validate(registerSchema),
+  registerController,
+)
+router.post('/login', loginLimiter, validate(loginSchema), loginController)
 
-router.post('/verify/email', validate(verifyEmailSchema), verifyEmail)
+router.post(
+  '/verify/email',
+  verifyEmailLimiter,
+  validate(verifyEmailSchema),
+  verifyEmail,
+)
 router.get('/verify/token', authMiddleware, verifyToken)
 
 export default router
