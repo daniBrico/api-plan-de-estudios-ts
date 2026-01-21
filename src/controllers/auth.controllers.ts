@@ -7,7 +7,7 @@ import { verificationResponses } from '../constants/AuthResponses'
 
 export const registerController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const { name, lastName, email, password } = req.body
 
@@ -15,7 +15,7 @@ export const registerController = async (
     name,
     lastName,
     email,
-    password
+    password,
   )
 
   if (registerServiceResult.status === 'EMAIL_SEND_FAILED') {
@@ -54,7 +54,7 @@ export const loginController = async (req: Request, res: Response) => {
   const { user } = loginServiceResult
 
   const token = createAccessToken({
-    id: user._id,
+    id: user._id.toString(),
     name: user.name,
     lastName: user.lastName,
     email: user.email,
@@ -80,7 +80,7 @@ export const loginController = async (req: Request, res: Response) => {
 
 export const verifyToken = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const id = req.user?.id
