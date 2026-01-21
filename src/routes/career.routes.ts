@@ -5,7 +5,7 @@ import {
 } from '../controllers/career.controllers'
 import { publicLimiter } from '../middlewares/rateLimit.middleware'
 import { validate } from '../middlewares/validate.middleware'
-import { mongoIdSchema } from '../schemas/params/mongoID.schema'
+import { mongoIdSchema } from '../schemas/params/mongoId.schema'
 
 const router = Router()
 
