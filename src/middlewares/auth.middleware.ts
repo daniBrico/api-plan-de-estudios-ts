@@ -4,15 +4,16 @@ import { verifyAccessToken } from '../utils/jwt'
 export const authMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const token = req.cookies.token
 
     if (!token) {
-      res.status(401).json({ message: 'Invalid token' })
+      res.status(401).json({ message: 'Unauthorize' })
       return
     }
+
     const decoded = verifyAccessToken(token)
 
     req.user = {
@@ -24,7 +25,7 @@ export const authMiddleware = (
 
     next()
   } catch (err) {
-    res.status(403).json({ message: 'Invalid token' })
+    res.status(403).json({ message: 'Forbidden' })
     return
   }
 }
