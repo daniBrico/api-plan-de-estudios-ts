@@ -156,7 +156,7 @@ export class VerificationService {
     name,
   }: SendVerificationEmailProps) => {
     try {
-      const verifyURL = `${FRONTEND_URL}/#/verify/email?token=${token}`
+      const verifyURL = `${FRONTEND_URL}/plan-estudios-web-ts/#/verify/email?token=${token}`
       // const { error } = await resend.emails.send({
       //   from: 'Soporte <no-reply@resend.dev>',
       //   to: email,
