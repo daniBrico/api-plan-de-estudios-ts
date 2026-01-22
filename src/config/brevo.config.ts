@@ -3,7 +3,9 @@ import {
   TransactionalEmailsApiApiKeys,
   SendSmtpEmail,
 } from '@getbrevo/brevo'
-import { ENV } from './config'
+import { EMAIL_CONFIG, ENV } from './config'
+
+const { SENDER_EMAIL, SENDER_NAME } = EMAIL_CONFIG
 
 export const transactionalApi = new TransactionalEmailsApi()
 
@@ -11,8 +13,6 @@ transactionalApi.setApiKey(
   TransactionalEmailsApiApiKeys.apiKey,
   ENV.BREVO_API_KEY as string,
 )
-
-const smtpEmail = new SendSmtpEmail()
 
 interface sendEmailProps {
   email: string
@@ -25,10 +25,31 @@ export const sendEmail = async ({
   email,
   htmlContent,
 }: sendEmailProps) => {
-  smtpEmail.subject = subject
-  smtpEmail.to = [{ email: email }]
-  smtpEmail.htmlContent = htmlContent
-  smtpEmail.sender = { name: 'Daniel Jorge', email: 'stailokmix@gmail.com' }
+  try {
+    const smtpEmail = new SendSmtpEmail()
 
-  await transactionalApi.sendTransacEmail(smtpEmail)
+    smtpEmail.subject = subject
+    smtpEmail.to = [{ email: email }]
+    smtpEmail.htmlContent = htmlContent
+    smtpEmail.sender = {
+      name: SENDER_NAME,
+      email: SENDER_EMAIL,
+    }
+
+    const response = await transactionalApi.sendTransacEmail(smtpEmail)
+
+    return {
+      ok: true,
+      messageId: response.body?.messageId ?? null,
+    }
+  } catch (error: any) {
+    return {
+      ok: false,
+      statusCode: error?.status,
+      message:
+        error?.response?.body?.message ||
+        error?.message ||
+        'Error desconocido enviando email',
+    }
+  }
 }

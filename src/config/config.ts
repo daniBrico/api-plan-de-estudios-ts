@@ -20,3 +20,8 @@ export const FRONTEND_URLS = {
   LAN: process.env.FRONTEND_URL_LAN,
   GITHUB_PAGES: process.env.FRONTEND_URL_GITHUB_PAGES,
 }
+
+export const EMAIL_CONFIG = {
+  SENDER_EMAIL: process.env.BREVO_SENDER_EMAIL,
+  SENDER_NAME: process.env.BREVO_SENDER_NAME,
+}

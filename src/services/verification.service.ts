@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { UserDocument } from '../types/domain/user'
 import { Temporal } from '@js-temporal/polyfill'
-import { Resend } from 'resend'
+// import { Resend } from 'resend'
 import { VERIFICATION_CONFIG, ENV, FRONTEND_URLS } from '../config/config'
 import { sendEmail } from '../config/brevo.config'
 
@@ -11,9 +11,9 @@ interface SendVerificationEmailProps {
   name: string
 }
 
-const { LOCAL } = FRONTEND_URLS
+const { GITHUB_PAGES: FRONTEND_URL } = FRONTEND_URLS
 
-const resend = new Resend(ENV.RESEND_API_KEY)
+// const resend = new Resend(ENV.RESEND_API_KEY)
 
 const {
   MIN_RESEND_INTERVAL_MINUTES,
@@ -155,12 +155,8 @@ export class VerificationService {
     token,
     name,
   }: SendVerificationEmailProps) => {
-    console.log('🚀 ~ VerificationService ~ name: ', name)
-    console.log('🚀 ~ VerificationService ~ token: ', token)
-    console.log('🚀 ~ VerificationService ~ email: ', email)
     try {
-      const verifyURL = `${LOCAL}/#/verify/email?token=${token}`
-
+      const verifyURL = `${FRONTEND_URL}/#/verify/email?token=${token}`
       // const { error } = await resend.emails.send({
       //   from: 'Soporte <no-reply@resend.dev>',
       //   to: email,
@@ -180,17 +176,27 @@ export class VerificationService {
           <body>
             <h2>Hola ${name}</h2>
             <p>Por favor, verifica tu cuenta haciendo click en el siguiente link:</p>
-            <a href="${verifyURL}">${verifyURL}</a>
+            <a href="${verifyURL}">Link</a>
             <p>Este enlace vencerá en 24 horas.</p>
           </body>
         </html>
       `
-
       const subject = 'Verifica tu cuenta'
+      const result = await sendEmail({ email, subject, htmlContent })
 
-      await sendEmail({ email, subject, htmlContent })
+      if (!result.ok) {
+        console.error('Verification email failed:', result.message)
 
-      return { ok: true, error: null }
+        return {
+          ok: false,
+          error: result.message,
+        }
+      }
+
+      return {
+        ok: true,
+        error: result.messageId,
+      }
     } catch (error) {
       if (error instanceof Error) {
         console.log('Error sending verification email: ', error.message)
