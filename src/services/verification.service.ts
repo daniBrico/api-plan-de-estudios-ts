@@ -3,6 +3,7 @@ import { UserDocument } from '../types/domain/user'
 import { Temporal } from '@js-temporal/polyfill'
 import { Resend } from 'resend'
 import { VERIFICATION_CONFIG, ENV, FRONTEND_URLS } from '../config/config'
+import { sendEmail } from '../config/brevo.config'
 
 interface SendVerificationEmailProps {
   email: string
@@ -154,22 +155,40 @@ export class VerificationService {
     token,
     name,
   }: SendVerificationEmailProps) => {
+    console.log('🚀 ~ VerificationService ~ name: ', name)
+    console.log('🚀 ~ VerificationService ~ token: ', token)
+    console.log('🚀 ~ VerificationService ~ email: ', email)
     try {
       const verifyURL = `${LOCAL}/#/verify/email?token=${token}`
 
-      const { error } = await resend.emails.send({
-        from: 'Soporte <no-reply@resend.dev>',
-        to: email,
-        subject: 'Verifica tu cuenta',
-        html: `
-        <h2>Hola ${name}</h2>
-        <p>Por favor, verifica tu cuenta haciendo click en el siguiente link:</p>
-        <a href="${verifyURL}">${verifyURL}</a>
-        <p>Este enlace vencerá en 24 horas.</p>
-        `,
-      })
+      // const { error } = await resend.emails.send({
+      //   from: 'Soporte <no-reply@resend.dev>',
+      //   to: email,
+      //   subject: 'Verifica tu cuenta',
+      //   html: `
+      //   <h2>Hola ${name}</h2>
+      //   <p>Por favor, verifica tu cuenta haciendo click en el siguiente link:</p>
+      //   <a href="${verifyURL}">${verifyURL}</a>
+      //   <p>Este enlace vencerá en 24 horas.</p>
+      //   `,
+      // })
 
-      if (error) return { ok: false, error: error }
+      // if (error) return { ok: false, error: error }
+
+      const htmlContent = `
+        <html>
+          <body>
+            <h2>Hola ${name}</h2>
+            <p>Por favor, verifica tu cuenta haciendo click en el siguiente link:</p>
+            <a href="${verifyURL}">${verifyURL}</a>
+            <p>Este enlace vencerá en 24 horas.</p>
+          </body>
+        </html>
+      `
+
+      const subject = 'Verifica tu cuenta'
+
+      await sendEmail({ email, subject, htmlContent })
 
       return { ok: true, error: null }
     } catch (error) {
