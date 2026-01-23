@@ -4,6 +4,9 @@ import { Temporal } from '@js-temporal/polyfill'
 // import { Resend } from 'resend'
 import { VERIFICATION_CONFIG, ENV, FRONTEND_URLS } from '../config/config'
 import { sendEmail } from '../config/brevo.config'
+import { loadTemplate } from '../emails/renderTemplate'
+import path from 'node:path'
+import fs from 'node:fs'
 
 interface SendVerificationEmailProps {
   email: string
@@ -171,16 +174,11 @@ export class VerificationService {
 
       // if (error) return { ok: false, error: error }
 
-      const htmlContent = `
-        <html>
-          <body>
-            <h2>Hola ${name}</h2>
-            <p>Por favor, verifica tu cuenta haciendo click en el siguiente link:</p>
-            <a href="${verifyURL}">Link</a>
-            <p>Este enlace vencerá en 24 horas.</p>
-          </body>
-        </html>
-      `
+      const htmlContent = loadTemplate('verification.html', {
+        name,
+        verifyURL,
+      })
+
       const subject = 'Verifica tu cuenta'
       const result = await sendEmail({ email, subject, htmlContent })
 

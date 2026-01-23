@@ -1,0 +1,61 @@
+<html>
+  <body
+    style="
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    "
+  >
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td align="center" style="padding: 20px 0">
+          <table
+            width="600"
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            style="background-color: #ffffff; border-radius: 8px; padding: 20px"
+          >
+            <tr>
+              <td>
+                <h2 style="color: #333333">Hola {{name}},</h2>
+                <p style="color: #555555; font-size: 16px">
+                  Por favor, verifica tu cuenta haciendo click en el siguiente
+                  botón:
+                </p>
+                <p style="text-align: center">
+                  <a
+                    href="{{verifyURL}}"
+                    style="
+                      display: inline-block;
+                      padding: 12px 24px;
+                      color: #ffffff;
+                      background-color: #007bff;
+                      text-decoration: none;
+                      border-radius: 4px;
+                      font-weight: bold;
+                    "
+                    >Verificar Cuenta</a
+                  >
+                </p>
+                <p style="color: #555555; font-size: 14px">
+                  Este enlace vencerá en 24 horas.
+                </p>
+                <p style="color: #999999; font-size: 12px">
+                  Si el botón no funciona, copia y pega este enlace en tu
+                  navegador:<br />
+                  <a
+                    href="{{verifyURL}}"
+                    style="color: #007bff; word-break: break-all"
+                    >{{verifyURL}}</a
+                  >
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

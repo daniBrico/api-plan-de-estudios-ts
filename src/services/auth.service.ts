@@ -20,7 +20,7 @@ export const registerService = async (
   name: string,
   lastName: string,
   email: string,
-  password: string
+  password: string,
 ): Promise<RegisterServiceResult> => {
   const user = await UserModel.findOne({ email })
 
@@ -35,9 +35,8 @@ export const registerService = async (
   newUser.password = await newUser.encryptPassword(password)
   await newUser.save()
 
-  const verificationResult = await VerificationService.handleUnverifiedUser(
-    newUser
-  )
+  const verificationResult =
+    await VerificationService.handleUnverifiedUser(newUser)
 
   if (verificationResult.status === 'SEND_FAILED')
     return {
@@ -65,7 +64,7 @@ type LoginServiceResult =
 
 export const loginService = async (
   email: string,
-  password: string
+  password: string,
 ): Promise<LoginServiceResult> => {
   const user = await UserModel.findOne({ email })
   if (!user) throw AuthError.invalidCredentials()
@@ -74,9 +73,8 @@ export const loginService = async (
   if (!passwordMatch) throw AuthError.invalidCredentials()
 
   if (!user.isVerified) {
-    const verificationResult = await VerificationService.handleUnverifiedUser(
-      user
-    )
+    const verificationResult =
+      await VerificationService.handleUnverifiedUser(user)
 
     return { status: 'NOT_VERIFIED', verification: verificationResult }
   }
