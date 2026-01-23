@@ -1,18 +1,16 @@
 import { NextFunction, Request, Response } from 'express'
 import { verifyAccessToken } from '../utils/jwt'
+import { AuthError } from '../errors/AuthError'
 
 export const authMiddleware = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) => {
   try {
     const token = req.cookies.token
 
-    if (!token) {
-      res.status(401).json({ message: 'Unauthorize' })
-      return
-    }
+    if (!token) throw AuthError.missingToken()
 
     const decoded = verifyAccessToken(token)
 
@@ -24,8 +22,7 @@ export const authMiddleware = (
     }
 
     next()
-  } catch (err) {
-    res.status(403).json({ message: 'Forbidden' })
-    return
+  } catch (error) {
+    next(error)
   }
 }
