@@ -5,6 +5,7 @@ import { VerificationService } from '../services/verification.service'
 import { loginService, registerService } from '../services/auth.service'
 import { verificationResponses } from '../constants/AuthResponses'
 import { ENV } from '../config/config'
+import { clearAuthCookie, setAuthCookie } from '../utils/authCookies'
 
 export const registerController = async (
   req: Request,
@@ -61,13 +62,7 @@ export const loginController = async (req: Request, res: Response) => {
     email: user.email,
   })
 
-  res.cookie('token', token, {
-    httpOnly: true,
-    secure: ENV.IS_PRODUCTION,
-    sameSite: 'strict',
-    path: '/',
-    maxAge: Number(ENV.JWT_EXPIRES_IN),
-  })
+  setAuthCookie(res, token)
 
   res.status(200).json({
     message: 'Login was successful',
@@ -82,12 +77,7 @@ export const loginController = async (req: Request, res: Response) => {
 }
 
 export const logoutController = (_req: Request, res: Response) => {
-  res.clearCookie('token', {
-    httpOnly: true,
-    secure: ENV.IS_PRODUCTION,
-    sameSite: 'strict',
-    path: '/',
-  })
+  clearAuthCookie(res)
 
   res.sendStatus(204)
 }
