@@ -3,7 +3,7 @@ import {
   TransactionalEmailsApiApiKeys,
   SendSmtpEmail,
 } from '@getbrevo/brevo'
-import { EMAIL_CONFIG, ENV } from './config'
+import { EMAIL_CONFIG } from './config'
 
 const { SENDER_EMAIL, SENDER_NAME } = EMAIL_CONFIG
 
@@ -11,7 +11,7 @@ export const transactionalApi = new TransactionalEmailsApi()
 
 transactionalApi.setApiKey(
   TransactionalEmailsApiApiKeys.apiKey,
-  ENV.BREVO_API_KEY as string,
+  EMAIL_CONFIG.BREVO_API_KEY as string,
 )
 
 interface sendEmailProps {
