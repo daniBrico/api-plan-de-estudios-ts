@@ -1,8 +1,19 @@
+import { StringValue } from 'ms'
+
+const required = (value: string | undefined, name: string): string => {
+  if (!value) {
+    throw new Error(`Environment variable ${name} is not defined`)
+  }
+
+  return value
+}
+
 export const ENV = {
-  JWT_SECRET: process.env.JWT_SECRET,
-  RESEND_API_KEY: process.env.RESEND_API_KEY,
-  PORT: process.env.PORT ?? 3000,
-  BREVO_API_KEY: process.env.BREVO_API_KEY,
+  JWT_SECRET: required(process.env.JWT_SECRET, 'JWT_SECRET'),
+  JWT_EXPIRES_IN: (process.env.JWT_EXPIRES_IN ?? '15m') as StringValue,
+  TOKEN_MAX_AGE: Number(process.env.TOKEN_MAX_AGE ?? 15) * 60 * 1000,
+  PORT: Number(process.env.PORT ?? 3000),
+  IS_PRODUCTION: process.env.NODE_ENV === 'production',
 }
 
 export const VERIFICATION_CONFIG = {
@@ -22,6 +33,8 @@ export const FRONTEND_URLS = {
 }
 
 export const EMAIL_CONFIG = {
-  SENDER_EMAIL: process.env.BREVO_SENDER_EMAIL,
-  SENDER_NAME: process.env.BREVO_SENDER_NAME,
+  BREVO_API_KEY: required(process.env.BREVO_API_KEY, 'BREVO_API_KEY'),
+  SENDER_EMAIL: required(process.env.BREVO_SENDER_EMAIL, 'BREVO_SENDER_EMAIL'),
+  SENDER_NAME: required(process.env.BREVO_SENDER_NAME, 'BREVO_SENDER_NAME'),
+  RESEND_API_KEY: required(process.env.RESEND_API_KEY, 'RESEND_API_KEY'),
 }

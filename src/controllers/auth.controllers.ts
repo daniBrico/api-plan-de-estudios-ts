@@ -4,6 +4,8 @@ import { createAccessToken } from '../utils/jwt'
 import { VerificationService } from '../services/verification.service'
 import { loginService, registerService } from '../services/auth.service'
 import { verificationResponses } from '../constants/AuthResponses'
+import { ENV } from '../config/config'
+import { clearAuthCookie, setAuthCookie } from '../utils/authCookies'
 
 export const registerController = async (
   req: Request,
@@ -60,11 +62,7 @@ export const loginController = async (req: Request, res: Response) => {
     email: user.email,
   })
 
-  res.cookie('token', token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'strict',
-  })
+  setAuthCookie(res, token)
 
   res.status(200).json({
     message: 'Login was successful',
@@ -78,37 +76,20 @@ export const loginController = async (req: Request, res: Response) => {
   })
 }
 
+export const logoutController = (_req: Request, res: Response) => {
+  clearAuthCookie(res)
+
+  res.sendStatus(204)
+}
+
 export const verifyToken = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  try {
-    const id = req.user?.id
-
-    const userFounded = await UserModel.findById(id)
-
-    if (!userFounded) {
-      res.status(401).json({ message: 'Authentication error' })
-      return
-    }
-
-    res.status(200).json({
-      message: 'Successful authentication',
-      user: {
-        id: userFounded._id,
-        name: userFounded.name,
-        lastName: userFounded.lastName,
-        email: userFounded.email,
-      },
-    })
-  } catch (err) {
-    if (err instanceof Error) {
-      res.status(500).json({ message: 'Internal server error' })
-      return
-    }
-
-    res.status(500).json({ message: 'Unexpected error' })
-  }
+  res.status(200).json({
+    message: 'Authenticated',
+    user: req.user,
+  })
 }
 
 export const verifyEmail = async (req: Request, res: Response) => {

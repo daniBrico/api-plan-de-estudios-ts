@@ -9,4 +9,7 @@ export const AuthError = {
 
   emailAlreadyExists: () =>
     createAppError('Email already in use', 409, 'EMAIL_ALREADY_EXISTS'),
+
+  missingToken: () =>
+    createAppError('Authentication token missing', 401, 'TOKEN_MISSING'),
 }
