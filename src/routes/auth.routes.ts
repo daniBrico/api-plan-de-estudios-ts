@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   loginController,
+  logoutController,
   registerController,
   verifyEmail,
   verifyToken,
@@ -33,5 +34,7 @@ router.post(
   verifyEmail,
 )
 router.get('/verify/token', authMiddleware, verifyToken)
+
+router.post('/logout', authMiddleware, logoutController)
 
 export default router

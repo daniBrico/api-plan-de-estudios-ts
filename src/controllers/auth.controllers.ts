@@ -4,6 +4,7 @@ import { createAccessToken } from '../utils/jwt'
 import { VerificationService } from '../services/verification.service'
 import { loginService, registerService } from '../services/auth.service'
 import { verificationResponses } from '../constants/AuthResponses'
+import { ENV } from '../config/config'
 
 export const registerController = async (
   req: Request,
@@ -62,8 +63,10 @@ export const loginController = async (req: Request, res: Response) => {
 
   res.cookie('token', token, {
     httpOnly: true,
-    secure: true,
+    secure: ENV.IS_PRODUCTION,
     sameSite: 'strict',
+    path: '/',
+    maxAge: Number(ENV.JWT_EXPIRES_IN),
   })
 
   res.status(200).json({
@@ -76,6 +79,17 @@ export const loginController = async (req: Request, res: Response) => {
     },
     code: 'LOGIN_SUCCESSFUL',
   })
+}
+
+export const logoutController = (_req: Request, res: Response) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: ENV.IS_PRODUCTION,
+    sameSite: 'strict',
+    path: '/',
+  })
+
+  res.sendStatus(204)
 }
 
 export const verifyToken = async (
