@@ -2,7 +2,10 @@ import { randomUUID } from 'node:crypto'
 import { UserDocument } from '../types/domain/user'
 import { Temporal } from '@js-temporal/polyfill'
 // import { Resend } from 'resend'
-import { VERIFICATION_CONFIG, ENV, FRONTEND_URLS } from '../config/config'
+import {
+  VERIFICATION_CONFIG,
+  FRONTEND_URLS /* EMAIL_CONFIG */,
+} from '../config/config'
 import { sendEmail } from '../config/brevo.config'
 
 interface SendVerificationEmailProps {
@@ -13,7 +16,7 @@ interface SendVerificationEmailProps {
 
 const { GITHUB_PAGES: FRONTEND_URL } = FRONTEND_URLS
 
-// const resend = new Resend(ENV.RESEND_API_KEY)
+// const resend = new Resend(EMAIL_CONFIG.RESEND_API_KEY)
 
 const {
   MIN_RESEND_INTERVAL_MINUTES,
