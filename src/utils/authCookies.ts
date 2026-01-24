@@ -10,3 +10,12 @@ export const setAuthCookie = (res: Response, token: string) => {
     maxAge: Number(ENV.TOKEN_MAX_AGE),
   })
 }
+
+export const clearAuthCookie = (res: Response) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: ENV.IS_PRODUCTION,
+    sameSite: 'lax',
+    path: '/',
+  })
+}
