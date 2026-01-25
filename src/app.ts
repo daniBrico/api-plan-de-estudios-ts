@@ -9,6 +9,8 @@ import { globalLimiter } from './middlewares/rateLimit.middleware'
 
 const app = express()
 
+app.set('trust proxy', 1)
+
 const { LOCAL, LAN, GITHUB_PAGES } = FRONTEND_URLS
 
 const corsOptions = {
@@ -21,9 +23,6 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser())
-
-/* Rate limiting global */
-app.use(globalLimiter)
 
 /* Routes */
 app.use('/auth', authRoutes)
