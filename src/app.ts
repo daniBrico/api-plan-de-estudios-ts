@@ -5,7 +5,6 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { FRONTEND_URLS } from './config/config'
 import { errorHandler } from './middlewares/errorHandler.middleware'
-import { globalLimiter } from './middlewares/rateLimit.middleware'
 
 const app = express()
 
