@@ -36,5 +36,5 @@ export const EMAIL_CONFIG = {
   BREVO_API_KEY: required(process.env.BREVO_API_KEY, 'BREVO_API_KEY'),
   SENDER_EMAIL: required(process.env.BREVO_SENDER_EMAIL, 'BREVO_SENDER_EMAIL'),
   SENDER_NAME: required(process.env.BREVO_SENDER_NAME, 'BREVO_SENDER_NAME'),
-  RESEND_API_KEY: required(process.env.RESEND_API_KEY, 'RESEND_API_KEY'),
+  // RESEND_API_KEY: required(process.env.RESEND_API_KEY, 'RESEND_API_KEY'),
 }
