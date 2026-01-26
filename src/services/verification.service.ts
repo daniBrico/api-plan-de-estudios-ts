@@ -1,10 +1,11 @@
 import { randomUUID } from 'node:crypto'
 import { UserDocument } from '../types/domain/user'
 import { Temporal } from '@js-temporal/polyfill'
-// import { Resend } from 'resend'
-import { VERIFICATION_CONFIG, URLS /* EMAIL_CONFIG */ } from '../config/config'
-import { sendEmail } from '../config/brevo.config'
+import { VERIFICATION_CONFIG, URLS } from '../config/config'
 import { loadTemplate } from '../emails/renderTemplate'
+import { createEmailProvider } from '../emails/email.factory'
+
+const emailProvider = createEmailProvider('brevo')
 
 interface SendVerificationEmailProps {
   email: string
@@ -13,8 +14,6 @@ interface SendVerificationEmailProps {
 }
 
 const { FRONTEND } = URLS
-
-// const resend = new Resend(EMAIL_CONFIG.RESEND_API_KEY)
 
 const {
   MIN_RESEND_INTERVAL_MINUTES,
@@ -158,34 +157,22 @@ export class VerificationService {
   }: SendVerificationEmailProps) => {
     try {
       const verifyURL = `${FRONTEND}/plan-estudios-web-ts/#/verify/email?token=${token}`
-      // const { error } = await resend.emails.send({
-      //   from: 'Soporte <no-reply@resend.dev>',
-      //   to: email,
-      //   subject: 'Verifica tu cuenta',
-      //   html: `
-      //   <h2>Hola ${name}</h2>
-      //   <p>Por favor, verifica tu cuenta haciendo click en el siguiente link:</p>
-      //   <a href="${verifyURL}">${verifyURL}</a>
-      //   <p>Este enlace vencerá en 24 horas.</p>
-      //   `,
-      // })
-
-      // if (error) return { ok: false, error: error }
 
       const htmlContent = loadTemplate('verification.html', {
         name,
         verifyURL,
       })
 
-      const subject = 'Verifica tu cuenta'
-      const result = await sendEmail({ email, subject, htmlContent })
+      const result = await emailProvider.sendEmail({
+        to: email,
+        subject: 'Verifica tu cuenta',
+        html: htmlContent,
+      })
 
       if (!result.ok) {
-        console.error('Verification email failed:', result.message)
-
         return {
           ok: false,
-          error: result.message,
+          error: result.error,
         }
       }
 
