@@ -1,17 +1,29 @@
-import 'dotenv/config'
+import dotenv from 'dotenv'
+
+const envFile =
+  process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
+
+dotenv.config({ path: envFile })
+
 import { createServer } from 'node:http'
 import { app } from './app'
 import { openDatabaseConnection } from './models/mongoDB/database'
 import { ENV } from './config/config'
 
-// Tengo que configurar esta variable de entorno
-const port = ENV.PORT
+const bootstrap = async () => {
+  try {
+    await openDatabaseConnection()
+    console.log('Database connected')
 
-// Creación del servidor http
-const server = createServer(app)
+    const server = createServer(app)
 
-server.listen(port, () => {
-  console.log(`server running on port http://localhost:${port}`)
-})
+    server.listen(ENV.PORT, () => {
+      console.log(`Server running in ${ENV.NODE_ENV} mode on port ${ENV.PORT}`)
+    })
+  } catch (error) {
+    console.error('Error starting server: ', error)
+    process.exit(1)
+  }
+}
 
-openDatabaseConnection()
+bootstrap()
