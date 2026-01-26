@@ -2,14 +2,9 @@ import { randomUUID } from 'node:crypto'
 import { UserDocument } from '../types/domain/user'
 import { Temporal } from '@js-temporal/polyfill'
 // import { Resend } from 'resend'
-import {
-  VERIFICATION_CONFIG,
-  FRONTEND_URLS /* EMAIL_CONFIG */,
-} from '../config/config'
+import { VERIFICATION_CONFIG, URLS /* EMAIL_CONFIG */ } from '../config/config'
 import { sendEmail } from '../config/brevo.config'
 import { loadTemplate } from '../emails/renderTemplate'
-import path from 'node:path'
-import fs from 'node:fs'
 
 interface SendVerificationEmailProps {
   email: string
@@ -17,7 +12,7 @@ interface SendVerificationEmailProps {
   name: string
 }
 
-const { GITHUB_PAGES: FRONTEND_URL } = FRONTEND_URLS
+const { FRONTEND } = URLS
 
 // const resend = new Resend(EMAIL_CONFIG.RESEND_API_KEY)
 
@@ -162,7 +157,7 @@ export class VerificationService {
     name,
   }: SendVerificationEmailProps) => {
     try {
-      const verifyURL = `${FRONTEND_URL}/plan-estudios-web-ts/#/verify/email?token=${token}`
+      const verifyURL = `${FRONTEND}/plan-estudios-web-ts/#/verify/email?token=${token}`
       // const { error } = await resend.emails.send({
       //   from: 'Soporte <no-reply@resend.dev>',
       //   to: email,
