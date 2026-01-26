@@ -40,7 +40,7 @@ export const sendEmail = async ({
 
     return {
       ok: true,
-      messageId: response.body?.messageId ?? null,
+      messageId: response.body?.messageId,
     }
   } catch (error: any) {
     return {
