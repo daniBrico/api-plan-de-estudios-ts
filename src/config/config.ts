@@ -14,6 +14,7 @@ export const ENV = {
   TOKEN_MAX_AGE: Number(process.env.TOKEN_MAX_AGE ?? 15) * 60 * 1000,
   PORT: Number(process.env.PORT ?? 3000),
   IS_PRODUCTION: process.env.NODE_ENV === 'production',
+  NODE_ENV: process.env.NODE_END ?? 'development',
 }
 
 export const VERIFICATION_CONFIG = {
@@ -26,10 +27,9 @@ export const VERIFICATION_CONFIG = {
   TOKEN_EXPIRATION_HOURS: Number(process.env.TOKEN_EXPIRATION_HOURS ?? 24),
 }
 
-export const FRONTEND_URLS = {
-  LOCAL: process.env.FRONTEND_URL_LOCAL,
-  LAN: process.env.FRONTEND_URL_LAN,
-  GITHUB_PAGES: process.env.FRONTEND_URL_GITHUB_PAGES,
+export const URLS = {
+  FRONTEND_ORIGINS: process.env.FRONTEND_ORIGINS,
+  FRONTEND: process.env.FRONTEND,
 }
 
 export const EMAIL_CONFIG = {
