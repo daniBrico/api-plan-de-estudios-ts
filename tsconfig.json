@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "ES2022",
     "module": "commonjs",
-    "moduleResolution": "node10",
     "resolveJsonModule": true,
     "outDir": "./dist",
     "esModuleInterop": true,
@@ -14,5 +13,5 @@
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "dist", "src/tests", "**/*.tests.ts"]
+  "exclude": ["node_modules", "dist", "src/tests", "**/*.test.ts"]
 }
