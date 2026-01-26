@@ -3,17 +3,17 @@ import careerRoutes from './routes/career.routes'
 import authRoutes from './routes/auth.routes'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import { FRONTEND_URLS } from './config/config'
+import { URLS } from './config/config'
 import { errorHandler } from './middlewares/errorHandler.middleware'
 
 const app = express()
 
 app.set('trust proxy', 1)
 
-const { LOCAL, LAN, GITHUB_PAGES } = FRONTEND_URLS
+const { FRONTEND_ORIGINS } = URLS
 
 const corsOptions = {
-  origin: [`${LOCAL}`, `${LAN}`, `${GITHUB_PAGES}`],
+  origin: FRONTEND_ORIGINS?.split(','),
   methods: 'GET',
   credentials: true,
 }
