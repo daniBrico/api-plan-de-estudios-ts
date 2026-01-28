@@ -1,8 +1,12 @@
 import { z } from 'zod'
+import { emailSchema } from '../fields/email.schema'
+import { lastNameSchema } from '../fields/lastName.schema'
+import { nameSchema } from '../fields/name.schema'
+import { passwordSchema } from '../fields/password.schema'
 
 export const registerSchema = z.object({
-  name: z.string().min(2).max(25),
-  lastName: z.string().min(2).max(50),
-  email: z.email(),
-  password: z.string().min(8).max(64),
+  name: nameSchema,
+  lastName: lastNameSchema,
+  email: emailSchema,
+  password: passwordSchema,
 })
