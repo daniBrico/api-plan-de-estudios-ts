@@ -2,7 +2,7 @@
 
 API REST para la aplicación web de Plan de Estudios. Permite la gestión de carreras y la autenticación de usuarios (registro, login y verificación por correo electrónico). Desarrollada con Node.js y TypeScript, siguiendo una arquitectura MVC y un enfoque modular orientado a la escalabilidad y el mantenimiento.
 
-Actualmente la API se encuentra publicada en render para dar respuesta a las peticiones del [backend](https://github.com/daniBrico/plan-estudios-web-ts).
+Actualmente la API se encuentra en producción utilizando el servicio de Render para dar respuesta a las peticiones del [frontend](https://github.com/daniBrico/plan-estudios-web-ts).
 
 ## Tecnologías
 
@@ -15,12 +15,15 @@ Actualmente la API se encuentra publicada en render para dar respuesta a las pet
 ## Seguridad y autenticación
 
 - JWT (JSON Web Tokens)
-- Rate limiting
+- Rate limiting (express-rate-limit)
 - Validación de datos con Zod
 
 ## Servicios externos
 
-- Brevo (envío de emails para verificación de cuenta)
+Brevo (envío de emails para verificación de cuenta):
+
+- El envío de emails se implementó mediante un patrón _Provider_, lo que permite desacoplar la lógica de la aplicación del servicio de mensajería concreto (Brevo, Resend, etc.).
+  Esto facilita el reemplazo o la incorporación de nuevos proveedores sin modificar la lógica de negocio.
 
 ## Arquitectura
 
