@@ -11,7 +11,7 @@ const required = (value: string | undefined, name: string): string => {
 export const ENV = {
   JWT_SECRET: required(process.env.JWT_SECRET, 'JWT_SECRET'),
   JWT_EXPIRES_IN: (process.env.JWT_EXPIRES_IN ?? '15m') as StringValue,
-  TOKEN_MAX_AGE: Number(process.env.TOKEN_MAX_AGE ?? 15) * 60 * 1000,
+  TOKEN_MAX_AGE: Number(process.env.TOKEN_MAX_AGE ?? 900000),
   PORT: Number(process.env.PORT ?? 3000),
   IS_PRODUCTION: process.env.NODE_ENV === 'production',
   NODE_ENV: process.env.NODE_END ?? 'development',
