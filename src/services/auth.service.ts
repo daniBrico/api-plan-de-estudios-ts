@@ -1,8 +1,9 @@
 import { AuthError } from '../errors/AuthError'
 import UserModel from '../models/mongoDB/schemas/user.model'
 import bcrypt from 'bcrypt'
-import { VerificationResult, VerificationService } from './verification.service'
-import { UserDocument } from '../types/domain/user'
+import type { VerificationResult} from './verification.service';
+import { VerificationService } from './verification.service'
+import type { UserDocument } from '../types/domain/user'
 
 type RegisterServiceResult =
   | {

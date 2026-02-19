@@ -1,4 +1,4 @@
-import { Response } from 'express'
+import { type Response } from 'express'
 import { ENV } from '../config/config'
 
 export const setAuthCookie = (res: Response, token: string) => {

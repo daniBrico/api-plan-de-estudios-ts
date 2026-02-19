@@ -22,13 +22,13 @@ const setCareers = async () => {
 
     // Recorro las carreras del archivo .json (por ahora solo hay una)
     for (const career of careersData) {
-      let subjectsByYearToLoad = []
+      const subjectsByYearToLoad = []
 
       for (const subjectsByYear of career.subjectsByYear) {
-        let subjectsFindId = []
+        const subjectsFindId = []
 
         for (const subject of subjectsByYear.subjects) {
-          let subjectFind = subjects.find((obj) => obj.code === subject.code)
+          const subjectFind = subjects.find((obj) => obj.code === subject.code)
 
           if (subjectFind) subjectsFindId.push(subjectFind._id)
         }

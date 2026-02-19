@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import { verifyAccessToken } from '../utils/jwt'
 import { AuthError } from '../errors/AuthError'
 

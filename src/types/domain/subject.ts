@@ -1,4 +1,4 @@
-import { Types } from 'mongoose'
+import type { Types } from 'mongoose'
 
 export interface SubjectsByYear {
   year: string
@@ -65,7 +65,3 @@ export interface PopulatedSubjectDocument {
   offering?: string
   correlatives: { code: string }[]
 }
-
-/* Public types */
-
-export interface PublicSubject extends Subject {}

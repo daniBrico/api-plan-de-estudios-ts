@@ -1,8 +1,9 @@
+import type {
+  VerificationResult} from '../../../services/verification.service';
 import {
-  VerificationResult,
   VerificationService,
 } from '../../../services/verification.service'
-import { UserDocument } from '../../../types/domain/user'
+import type { UserDocument } from '../../../types/domain/user'
 
 const mockUser = () =>
   ({

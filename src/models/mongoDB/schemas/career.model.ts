@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { CareerDocument } from '../../../types/domain/career'
+import type { CareerDocument } from '../../../types/domain/career'
 
 const careerTransform = (_: unknown, ret: any) => {
   if (ret._id) {

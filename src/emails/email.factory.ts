@@ -1,4 +1,4 @@
-import { EmailProvider } from './email.provider'
+import type { EmailProvider } from './email.provider'
 import { BrevoEmailProvider } from './providers/brevo.provider'
 import { ResendEmailProvider } from './providers/resend.provider'
 

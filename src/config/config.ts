@@ -1,4 +1,4 @@
-import { StringValue } from 'ms'
+import type { StringValue } from 'ms'
 
 const required = (value: string | undefined, name: string): string => {
   if (!value) {

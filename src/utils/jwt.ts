@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { TokenPayload } from '../types/types'
+import type { TokenPayload } from '../types/types'
 import { ENV } from '../config/config'
 
 const { JWT_SECRET, JWT_EXPIRES_IN } = ENV
