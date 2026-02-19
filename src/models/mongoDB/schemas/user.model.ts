@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 import bcrypt from 'bcrypt'
-import { UserDocument } from '../../../types/domain/user'
+import { type UserDocument } from '../../../types/domain/user'
 
 const userTransform = (_: unknown, ret: any) => {
   if (ret._id) {
@@ -68,7 +68,7 @@ const UserSchema = new Schema<UserDocument>(
     toJSON: {
       transform: userTransform,
     },
-  }
+  },
 )
 
 UserSchema.methods.encryptPassword = async function (password: string) {

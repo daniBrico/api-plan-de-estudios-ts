@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { SubjectDocument } from '../../../types/domain/subject'
+import { type SubjectDocument } from '../../../types/domain/subject'
 
 const subjectTransform = (_: unknown, ret: any) => {
   if (ret._id) {
@@ -42,7 +42,7 @@ const SubjectSchema = new Schema<SubjectDocument>(
     toJSON: {
       transform: subjectTransform,
     },
-  }
+  },
 )
 
 const SubjectModel = model<SubjectDocument>('Subject', SubjectSchema)
