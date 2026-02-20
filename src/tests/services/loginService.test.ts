@@ -3,7 +3,13 @@ import { loginService } from '../../services/auth.service'
 import bcrypt from 'bcrypt'
 import { VerificationService } from '../../services/verification.service'
 
-jest.mock('../../models/mongoDB/schemas/user.model')
+jest.mock('../../models/mongoDB/schemas/user.model', () => ({
+  __esModule: true,
+  default: {
+    findOne: jest.fn(),
+  },
+}))
+
 jest.mock('bcrypt')
 
 jest.mock('../../services/verification.service', () => ({
@@ -17,7 +23,7 @@ describe('loginService', () => {
     ;(UserModel.findOne as jest.Mock).mockResolvedValue(null)
 
     await expect(loginService('test@mail.com', '123456')).rejects.toThrow(
-      'Invalid credentials'
+      'Invalid credentials',
     )
   })
 
@@ -37,7 +43,7 @@ describe('loginService', () => {
 
     expect(result.status).toBe('NOT_VERIFIED')
     expect(VerificationService.handleUnverifiedUser).toHaveBeenCalledWith(
-      mockUser
+      mockUser,
     )
   })
 
