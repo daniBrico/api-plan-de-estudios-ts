@@ -1,8 +1,5 @@
-import type {
-  VerificationResult} from '../../../services/verification.service';
-import {
-  VerificationService,
-} from '../../../services/verification.service'
+import type { VerificationResult } from '../../../services/verification.service'
+import { VerificationService } from '../../../services/verification.service'
 import type { UserDocument } from '../../../types/domain/user'
 
 const mockUser = () =>
@@ -14,7 +11,7 @@ const mockUser = () =>
     verificationEmailAttempts: 0,
     lastVerificationEmailSentAt: null,
     save: jest.fn().mockResolvedValue(true),
-  } as unknown as UserDocument)
+  }) as unknown as UserDocument
 
 describe('handleUnverifiedUser', () => {
   it('Return TOO_SOON reason if canSendVerificationEmail is BLOCKED', async () => {
@@ -75,7 +72,6 @@ describe('handleUnverifiedUser', () => {
 
     jest.spyOn(VerificationService, 'sendVerificationEmail').mockResolvedValue({
       ok: true,
-      error: null,
     })
 
     const result = await VerificationService.handleUnverifiedUser(user)
