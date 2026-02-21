@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
 
-const envFile = '.env.example'
+const envFile = '.env.test'
 
 dotenv.config({ path: envFile })
