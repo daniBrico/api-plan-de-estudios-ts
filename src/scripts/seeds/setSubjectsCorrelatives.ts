@@ -5,7 +5,7 @@ import {
   openDatabaseConnection,
 } from '../../models/mongoDB/database.js'
 import SubjectModel from '../../models/mongoDB/schemas/subject.model'
-import { Types } from 'mongoose'
+import type { Types } from 'mongoose'
 
 openDatabaseConnection()
   .then(() => {
@@ -23,12 +23,12 @@ const setSubjectsCorrelatives = async () => {
     // Recorro el arreglo de objetos subjectsCorrelatives
     await Promise.all(
       subjectsCorrelativesData.map(async (correlative) => {
-        let idCorrelatives: Types.ObjectId[] = []
+        const idCorrelatives: Types.ObjectId[] = []
 
         // Por cada materia, accedo a sus correlativas
         correlative.correlatives.forEach((correlative) => {
           // Por cada correlativa de mi archivo .json, la busco en el arreglo de materias que obtuve de la base de datos
-          let subjectFind = subjects.find(
+          const subjectFind = subjects.find(
             (subject) => subject.code === correlative
           )
           // Si la encuentro, me guardo su ID en el arreglo idCorrelatives

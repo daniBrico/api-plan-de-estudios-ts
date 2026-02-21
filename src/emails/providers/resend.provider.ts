@@ -1,5 +1,5 @@
 import { Resend } from 'resend'
-import { EmailProvider, SendEmailParams } from '../email.provider'
+import type { EmailProvider, SendEmailParams } from '../email.provider'
 import { EMAIL_CONFIG } from '../../config/config'
 
 export class ResendEmailProvider implements EmailProvider {

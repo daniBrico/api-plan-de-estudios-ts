@@ -1,5 +1,5 @@
-import { ZodType } from 'zod'
-import { Request, Response, NextFunction } from 'express'
+import type { ZodType } from 'zod'
+import type { Request, Response, NextFunction } from 'express'
 
 export const validate =
   <T>(schema: ZodType, property: 'body' | 'params' | 'query' = 'body') =>

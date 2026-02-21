@@ -1,5 +1,3 @@
-import { Document, Schema } from 'mongoose'
-
 /* jwt */
 export interface TokenPayload {
   id: string

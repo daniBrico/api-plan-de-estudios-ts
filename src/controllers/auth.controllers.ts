@@ -1,10 +1,9 @@
-import { Request, Response } from 'express'
+import type { Request, Response } from 'express'
 import UserModel from '../models/mongoDB/schemas/user.model'
 import { createAccessToken } from '../utils/jwt'
 import { VerificationService } from '../services/verification.service'
 import { loginService, registerService } from '../services/auth.service'
 import { verificationResponses } from '../constants/AuthResponses'
-import { ENV } from '../config/config'
 import { clearAuthCookie, setAuthCookie } from '../utils/authCookies'
 
 export const registerController = async (

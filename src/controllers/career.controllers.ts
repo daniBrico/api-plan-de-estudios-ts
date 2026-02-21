@@ -1,11 +1,10 @@
 import CareerModel from '../models/mongoDB/schemas/career.model'
 import SubjectModel from '../models/mongoDB/schemas/subject.model'
-import { Request, Response } from 'express'
-import { PopulatedCareer } from '../types/domain/career'
+import type { Request, Response } from 'express'
 
 export const getCareerNames = async (
   _req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const careerNames = await CareerModel.find({}, 'name')
@@ -17,15 +16,17 @@ export const getCareerNames = async (
 
     res.json(careerNames)
   } catch (error) {
-    error instanceof Error
-      ? res.status(500).json({ message: error.message })
-      : res.status(500).json({ message: 'An unknown error ocurred' })
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message })
+    } else {
+      res.status(500).json({ message: 'An unknown error ocurred' })
+    }
   }
 }
 
 export const getCareerByID = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const id = req.params.id
@@ -46,8 +47,10 @@ export const getCareerByID = async (
 
     res.json(career)
   } catch (err) {
-    err instanceof Error
-      ? res.status(500).json({ message: err.message })
-      : res.status(500).json({ message: 'An unknown error ocurred' })
+    if (err instanceof Error) {
+      res.status(500).json({ message: err.message })
+    } else {
+      res.status(500).json({ message: 'An unknown error ocurred' })
+    }
   }
 }

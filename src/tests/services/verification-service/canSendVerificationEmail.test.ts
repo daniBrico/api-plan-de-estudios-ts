@@ -1,9 +1,10 @@
 import { Temporal } from '@js-temporal/polyfill'
+import type {
+  canSendVerificationEmailReturn} from '../../../services/verification.service';
 import {
-  canSendVerificationEmailReturn,
   VerificationService,
 } from '../../../services/verification.service'
-import { UserDocument } from '../../../types/domain/user'
+import type { UserDocument } from '../../../types/domain/user'
 
 const FIXED_DATE = Temporal.Instant.from('2025-01-01T12:00:00Z')
 

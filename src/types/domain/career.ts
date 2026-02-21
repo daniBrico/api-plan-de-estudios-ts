@@ -1,4 +1,4 @@
-import {
+import type {
   PopulatedSubject,
   SubjectsByYear,
   SubjectsByYearDocument,
@@ -37,7 +37,3 @@ export interface PopulatedCareer {
     subjects: PopulatedSubject[]
   }[]
 }
-
-/* Public types */
-
-export interface PublicCareer extends Career {}

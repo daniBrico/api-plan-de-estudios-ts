@@ -1,18 +1,11 @@
-import {
-  TransactionalEmailsApi,
-  TransactionalEmailsApiApiKeys,
-  SendSmtpEmail,
-} from '@getbrevo/brevo'
+import { BrevoClient } from '@getbrevo/brevo'
 import { EMAIL_CONFIG } from './config'
 
 const { SENDER_EMAIL, SENDER_NAME } = EMAIL_CONFIG
 
-export const transactionalApi = new TransactionalEmailsApi()
-
-transactionalApi.setApiKey(
-  TransactionalEmailsApiApiKeys.apiKey,
-  EMAIL_CONFIG.BREVO_API_KEY as string,
-)
+export const brevo = new BrevoClient({
+  apiKey: EMAIL_CONFIG.BREVO_API_KEY,
+})
 
 interface sendEmailProps {
   email: string
@@ -20,27 +13,26 @@ interface sendEmailProps {
   htmlContent: string
 }
 
+// interface sendEmailReturn {
+
+// }
+
 export const sendEmail = async ({
   subject,
   email,
   htmlContent,
 }: sendEmailProps) => {
   try {
-    const smtpEmail = new SendSmtpEmail()
-
-    smtpEmail.subject = subject
-    smtpEmail.to = [{ email: email }]
-    smtpEmail.htmlContent = htmlContent
-    smtpEmail.sender = {
-      name: SENDER_NAME,
-      email: SENDER_EMAIL,
-    }
-
-    const response = await transactionalApi.sendTransacEmail(smtpEmail)
+    const response = await brevo.transactionalEmails.sendTransacEmail({
+      subject: subject,
+      textContent: htmlContent,
+      sender: { name: SENDER_NAME, email: SENDER_EMAIL },
+      to: [{ email: email }],
+    })
 
     return {
       ok: true,
-      messageId: response.body?.messageId,
+      messageId: response.messageId,
     }
   } catch (error: any) {
     return {

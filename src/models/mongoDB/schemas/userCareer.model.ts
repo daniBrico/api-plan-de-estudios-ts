@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import { UserCareer, UserCareerDocument } from '../../../types/domain/user'
+import type { UserCareerDocument } from '../../../types/domain/user'
 
 const userCareerTransform = (_: unknown, ret: any) => {
   if (ret._id) {
@@ -53,12 +53,12 @@ const UserCareerSchema = new Schema<UserCareerDocument>(
     toJSON: {
       transform: userCareerTransform,
     },
-  }
+  },
 )
 
 const UserCareerModel = model<UserCareerDocument>(
   'UserCareer',
-  UserCareerSchema
+  UserCareerSchema,
 )
 
 export default UserCareerModel
